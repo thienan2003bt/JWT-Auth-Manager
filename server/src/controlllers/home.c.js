@@ -12,6 +12,8 @@ module.exports = {
     renderUserPage: async (req, res, next) => {
         let userList = await UserService.getUserList();
 
+        await UserService.deleteUser(5);
+
         return res.render('user.ejs', {
             userList: userList
         });
@@ -20,8 +22,16 @@ module.exports = {
     insertNewUser: async (req, res, next) => {
         const { email, username, password } = req.body;
 
-        await UserService.createNewUser(email, username, password);
+        await UserService.createNewUser(email, password, username);
 
-        return res.send(req.body);
+        return res.redirect('/user');
+    },
+
+    deleteUser: async (req, res, next) => {
+        const { id } = req.params;
+
+        await UserService.deleteUser(id);
+
+        return res.redirect('/user');
     },
 }
