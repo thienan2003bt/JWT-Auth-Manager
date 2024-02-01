@@ -8,9 +8,13 @@ import HomeController from '../controlllers/home.c';
  * @param {*} app - express app
  */
 const initWebRoutes = (app) => {
-    router.get('/', HomeController.renderHome);
 
+    //GET
+    router.get('/', HomeController.renderHome);
     router.get('/user', HomeController.renderUserPage);
+
+    //POST
+    router.post('/user/create', HomeController.insertNewUser)
 
     return app.use('/', router);
 }
