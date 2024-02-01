@@ -10,7 +10,11 @@ module.exports = {
     },
 
     renderUserPage: async (req, res, next) => {
-        return res.render('user.ejs');
+        let userList = await UserService.getUserList();
+
+        return res.render('user.ejs', {
+            userList: userList
+        });
     },
 
     insertNewUser: async (req, res, next) => {

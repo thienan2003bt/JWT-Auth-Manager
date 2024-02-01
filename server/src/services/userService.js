@@ -1,11 +1,10 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';
 import bcrypt from 'bcrypt';
+import bluebird from 'bluebird';
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'jwt_auth_manager',
-});
+
+
+
 
 const SALT_ROUND = bcrypt.genSaltSync(10);
 
@@ -15,25 +14,22 @@ const hashUserPassword = async (rawPassword) => {
 
 const getUserList = async () => {
     try {
-        let userList = [];
-        connection.query(`
-            SELECT * FROM users
-        `, (err, results, fields) => {
-            if (err) {
-                console.log(err);
-                throw new Error(err.message);
-            }
-
-            if (!results) {
-                throw new Error("No user found in the database");
-            }
-
-            userList = results;
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt_auth_manager',
+            Promise: bluebird
         });
 
+        let userList = [];
+        const [rows, fields] = await connection.execute(`
+            SELECT * FROM users
+        `);
+
+        userList = rows;
         return userList;
     } catch (error) {
-        throw error;
+        console.log("Error: ", error.message);
     }
 
 }
