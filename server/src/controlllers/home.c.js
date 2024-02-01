@@ -1,10 +1,4 @@
-import mysql from 'mysql2';
-
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'jwt_auth_manager',
-});
+import UserService from '../services/userService';
 
 module.exports = {
     renderHome: async (req, res, next) => {
@@ -22,15 +16,7 @@ module.exports = {
     insertNewUser: async (req, res, next) => {
         const { email, username, password } = req.body;
 
-        connection.query(`
-            INSERT INTO users (email, username, password)
-            VALUES (?, ?, ?)
-        `, [email, username, password],
-            (err, results, fields) => {
-                if (err) console.log(err);
-
-                console.log(results);
-            });
+        await UserService.createNewUser(email, username, password);
 
         return res.send(req.body);
     },
