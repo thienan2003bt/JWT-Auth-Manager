@@ -96,9 +96,69 @@ const deleteUser = async (userID) => {
     }
 };
 
+
+/**
+ * 
+ * @param {*} userID - user id wanted to update
+ * @returns - all user's data
+ */
+const getUserByID = async (userID) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt_auth_manager',
+            Promise: bluebird
+        });
+
+        let [rows, fields] = await connection.execute(`
+            SELECT * FROM users WHERE id = ?
+        `, [userID]
+        );
+
+        if (!rows || rows.length <= 0) {
+            return null;
+        }
+
+        let userData = {
+            ...rows[0],
+            password: null,
+        }
+        return userData;
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+    }
+};
+
+
+const updateUser = async (email, username, id) => {
+    try {
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            database: 'jwt_auth_manager',
+            Promise: bluebird
+        });
+
+        let [rows, fields] = await connection.execute(`
+            UPDATE users SET email = ?, username = ?
+            WHERE id = ?
+        `, [email, username, id]
+        );
+
+        return rows;
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+    }
+};
+
 module.exports = {
     hashUserPassword,
     getUserList,
     createNewUser,
-    deleteUser
+    deleteUser,
+    getUserByID,
+    updateUser
 };
