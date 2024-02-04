@@ -18,6 +18,28 @@ const hashUserPassword = async (rawPassword) => {
  */
 const getUserList = async () => {
     try {
+
+        /*
+        Test relationship
+        let userList = await db.User.findOne({
+            where: {
+                id: 1
+            },
+            attributes: ["id", "email", "username"],
+            raw: true,
+            include: { model: db.Group, attributes: ["name", "description"]},
+            nest: true
+        });
+
+        let roleList = await db.Role.findAll({
+            raw: true,
+            include: { model: db.Group, where: {
+                id: 1
+            }},
+            nest: true
+        });
+        */
+
         let userList = await db.User.findAll();
         return userList;
     } catch (error) {
