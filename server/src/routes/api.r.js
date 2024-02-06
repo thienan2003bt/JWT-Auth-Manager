@@ -3,6 +3,23 @@ const router = express.Router();
 
 import APIController from '../controllers/api.c';
 
-router.get('/test-api', APIController.getTestAPI);
 
-module.exports = router;
+/**
+ * 
+ * @param {*} app - express app
+ */
+const initAPIRoutes = (app) => {
+    //middlewares
+
+
+    //GET
+    router.get('/test-api', APIController.getTestAPI);
+
+
+    //POST
+    router.post('/signup', APIController.postSignup);
+
+    return app.use('/api/v1/', router);
+}
+
+export default initAPIRoutes;

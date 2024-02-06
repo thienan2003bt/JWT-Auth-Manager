@@ -8,10 +8,6 @@ import HomeController from '../controllers/home.c';
  * @param {*} app - express app
  */
 const initWebRoutes = (app) => {
-    //middlewares
-    router.use('/api', require('./api.r'));
-
-
     //GET
     router.get('/', HomeController.renderHome);
     router.get('/user', HomeController.renderUserPage);

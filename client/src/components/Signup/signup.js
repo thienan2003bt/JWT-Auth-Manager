@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './signup.scss';
+import axios from 'axios';
 
 function Signup(props) {
 
@@ -11,45 +12,61 @@ function Signup(props) {
     const [password, setPassword] = useState('');
     const [retypePassword, setRetypePassword] = useState('');
 
+
+    const initialValid = {
+        validEmail: true,
+        validUsername: true,
+        validPhone: true,
+        validPassword: true,
+        validRetypePassword: true,
+    }
+    const [isValid, setIsValid] = useState(initialValid);
+
     const validateSignupForm = () => {
         const emailRegex = /\S+@\S+\.\S+/;
         const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
 
         if (!email) {
             toast.error("Email is required");
+            setIsValid({ ...initialValid, validEmail: false });
+            return false;
+        }
+        if (!emailRegex.test(email)) {
+            toast.error("Enter invalid email address");
+            setIsValid({ ...initialValid, validEmail: false });
             return false;
         }
         if (!username) {
             toast.error("Username is required");
+            setIsValid({ ...initialValid, validUsername: false });
             return false;
         }
         if (!phone) {
             toast.error("Phone number is required");
+            setIsValid({ ...initialValid, validPhone: false });
+            return false;
+        }
+        if (!phoneRegex.test([phone])) {
+            toast.error("Enter invalid phone number");
+            setIsValid({ ...initialValid, validPhone: false });
             return false;
         }
         if (!password) {
             toast.error("Password is required");
+            setIsValid({ ...initialValid, validPassword: false });
             return false;
         }
         if (password !== retypePassword) {
             toast.error("Your retype password is not the same with the password");
+            setIsValid({ ...initialValid, validRetypePassword: false });
             return false;
         }
 
-        if (!emailRegex.test(email)) {
-            toast.error("Enter invalid email address");
-            return false;
-        }
-
-        if (!phoneRegex.test([phone])) {
-            toast.error("Enter invalid phone number");
-            return false;
-        }
 
         return true;
     }
 
-    const handleSubmitSignupForm = () => {
+    const handleSubmitSignupForm = async () => {
         // let userData = {
         //     "email": email,
         //     "phone": phone,
@@ -59,6 +76,15 @@ function Signup(props) {
 
         let state = validateSignupForm();
         if (state) {
+            try {
+                const response = await axios.post('http://localhost:8080/api/v1/signup', {
+                    email, username, phone, password
+                });
+                console.log(response.data); // Example usage of response data
+            } catch (error) {
+                console.error('Error posting data:', error);
+            }
+        } else {
             toast.success("User data get successfully");
         }
     }
@@ -94,27 +120,27 @@ function Signup(props) {
                         <h1 className='title'>Signup Form</h1>
                         <div className="form-group">
                             <label htmlFor="email">Email: </label>
-                            <input required type="text" className="form-control" id="email" name="email" placeholder="Email address"
+                            <input required type="text" className={isValid.validEmail ? "form-control" : "form-control is-invalid"} id="email" name="email" placeholder="Email address"
                                 value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="username">Username: </label>
-                            <input required type="text" className="form-control" id="username" name="username" placeholder="Username"
+                            <input required type="text" className={isValid.validUsername ? "form-control" : "form-control is-invalid"} id="username" name="username" placeholder="Username"
                                 value={username} onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="phone">Phone: </label>
-                            <input type="text" className="form-control" id="phone" name="phone" placeholder="Phone"
+                            <input required type="text" className={isValid.validPhone ? "form-control" : "form-control is-invalid"} id="phone" name="phone" placeholder="Phone"
                                 value={phone} onChange={(e) => setPhone(e.target.value)}
                             />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="password">Password: </label>
-                            <input required type="password" className="form-control" id="password" name="password" placeholder="Password"
+                            <input required type="password" className={isValid.validPassword ? "form-control" : "form-control is-invalid"} id="password" name="password" placeholder="Password"
                                 value={password} onChange={(e) => setPassword(e.target.value)}
                             />
 
@@ -122,7 +148,7 @@ function Signup(props) {
 
                         <div className="form-group">
                             <label htmlFor="retype_password">Retype password: </label>
-                            <input required type="password" className="form-control" id="retype_password" name="retype_password" placeholder="Retype password"
+                            <input required type="password" className={isValid.validRetypePassword ? "form-control" : "form-control is-invalid"} id="retype_password" name="retype_password" placeholder="Retype password"
                                 value={retypePassword} onChange={(e) => setRetypePassword(e.target.value)}
                             />
                         </div>

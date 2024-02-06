@@ -10,6 +10,19 @@ const getTestAPI = (req, res, next) => {
     }
 }
 
+const postSignup = (req, res, next) => {
+    try {
+        console.log("Have reached there");
+        res.status(200).json({
+            message: 'ok',
+            data: req.body
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getTestAPI,
+    postSignup,
 };
