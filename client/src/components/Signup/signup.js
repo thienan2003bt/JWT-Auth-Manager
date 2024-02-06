@@ -1,8 +1,7 @@
-import React from 'react';
-import './signup.scss';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import './signup.scss';
 
 function Signup(props) {
 
@@ -12,30 +11,60 @@ function Signup(props) {
     const [password, setPassword] = useState('');
     const [retypePassword, setRetypePassword] = useState('');
 
-    const handleSubmitSignupForm = () => {
-        let userData = {
-            "email": email,
-            "phone": phone,
-            username,
-            password
-        };
+    const validateSignupForm = () => {
+        const emailRegex = /\S+@\S+\.\S+/;
+        const phoneRegex = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
 
-        alert("User data: " + JSON.stringify(userData));
+        if (!email) {
+            toast.error("Email is required");
+            return false;
+        }
+        if (!username) {
+            toast.error("Username is required");
+            return false;
+        }
+        if (!phone) {
+            toast.error("Phone number is required");
+            return false;
+        }
+        if (!password) {
+            toast.error("Password is required");
+            return false;
+        }
+        if (password !== retypePassword) {
+            toast.error("Your retype password is not the same with the password");
+            return false;
+        }
+
+        if (!emailRegex.test(email)) {
+            toast.error("Enter invalid email address");
+            return false;
+        }
+
+        if (!phoneRegex.test([phone])) {
+            toast.error("Enter invalid phone number");
+            return false;
+        }
+
+        return true;
+    }
+
+    const handleSubmitSignupForm = () => {
+        // let userData = {
+        //     "email": email,
+        //     "phone": phone,
+        //     username,
+        //     password
+        // };
+
+        let state = validateSignupForm();
+        if (state) {
+            toast.success("User data get successfully");
+        }
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let response = await axios.get('http://localhost:8080/api/test-api');
-                response = response.data;
-                console.log("Response data: ");
-                console.log(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
 
-        //fetchData();
     }, []);
 
     return (
