@@ -8,7 +8,6 @@ import HomeController from '../controllers/home.c';
  * @param {*} app - express app
  */
 const initWebRoutes = (app) => {
-
     //GET
     router.get('/', HomeController.renderHome);
     router.get('/user', HomeController.renderUserPage);
