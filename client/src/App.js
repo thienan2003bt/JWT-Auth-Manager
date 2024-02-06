@@ -6,7 +6,6 @@ import Login from './components/Login/login.js';
 function App() {
   return (
     <div className="App">
-      Header
       <Nav />
       <div>
         <Routes>
@@ -26,8 +25,6 @@ function App() {
 
         </Routes>
       </div>
-
-      Footer
     </div >
   );
 }
