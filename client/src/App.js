@@ -2,6 +2,7 @@ import './App.scss';
 import Nav from './components/Navigation/nav.js';
 import { Routes, Route } from 'react-router-dom';
 import Login from './components/Login/login.js';
+import Signup from './components/Signup/signup.js';
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
           <Route path="/news" element="News">
           </Route>
           <Route path="/login" element={<Login />}>
+          </Route>
+          <Route path="/signup" element={<Signup />}>
           </Route>
           <Route path="/about" element="about">
           </Route>

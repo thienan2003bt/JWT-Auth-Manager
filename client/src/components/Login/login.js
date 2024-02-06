@@ -1,7 +1,8 @@
 import React from 'react';
 import './login.scss';
+import { Link } from 'react-router-dom';
 
-function login(props) {
+function Login(props) {
     return (
         <div className='login-container d-flex flex-column justify-content-center'>
             <div className='container'>
@@ -37,8 +38,9 @@ function login(props) {
                             <hr />
                         </div>
                         <div className="text-center">
-
-                            <button type="button" className='btn btn-success'>Create new account</button>
+                            <Link to="/signup">
+                                <button type="button" className='btn btn-success'>Create new account</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -48,4 +50,4 @@ function login(props) {
     );
 };
 
-export default login;
+export default Login;
