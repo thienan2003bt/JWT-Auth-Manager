@@ -1,8 +1,43 @@
 import React from 'react';
 import './signup.scss';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
-function signup(props) {
+function Signup(props) {
+
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [retypePassword, setRetypePassword] = useState('');
+
+    const handleSubmitSignupForm = () => {
+        let userData = {
+            "email": email,
+            "phone": phone,
+            username,
+            password
+        };
+
+        alert("User data: " + JSON.stringify(userData));
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                let response = await axios.get('http://localhost:8080/api/test-api');
+                response = response.data;
+                console.log("Response data: ");
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        //fetchData();
+    }, []);
+
     return (
         <div className='signup-container d-flex flex-column justify-content-center'>
             <div className='container'>
@@ -27,34 +62,44 @@ function signup(props) {
                             </h1>
                         </div>
 
-                        <h1 className='title'>Login Form</h1>
+                        <h1 className='title'>Signup Form</h1>
                         <div className="form-group">
                             <label htmlFor="email">Email: </label>
-                            <input required type="text" className="form-control" id="email" name="email" placeholder="Email address" />
+                            <input required type="text" className="form-control" id="email" name="email" placeholder="Email address"
+                                value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="username">Username: </label>
-                            <input required type="text" className="form-control" id="username" name="username" placeholder="Username" />
+                            <input required type="text" className="form-control" id="username" name="username" placeholder="Username"
+                                value={username} onChange={(e) => setUsername(e.target.value)}
+                            />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="phone">Phone: </label>
-                            <input type="text" className="form-control" id="phone" name="phone" placeholder="Phone" />
+                            <input type="text" className="form-control" id="phone" name="phone" placeholder="Phone"
+                                value={phone} onChange={(e) => setPhone(e.target.value)}
+                            />
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="password">Password: </label>
-                            <input required type="password" className="form-control" id="password" name="password" placeholder="Password" />
+                            <input required type="password" className="form-control" id="password" name="password" placeholder="Password"
+                                value={password} onChange={(e) => setPassword(e.target.value)}
+                            />
+
                         </div>
 
                         <div className="form-group">
                             <label htmlFor="retype_password">Retype password: </label>
-                            <input required type="password" className="form-control" id="retype_password" name="retype_password" placeholder="Retype password" />
+                            <input required type="password" className="form-control" id="retype_password" name="retype_password" placeholder="Retype password"
+                                value={retypePassword} onChange={(e) => setRetypePassword(e.target.value)}
+                            />
                         </div>
 
                         <div className="text-center">
-                            <button type="submit" className='btn btn-primary'>Sign up</button>
+                            <button type="submit" className='btn btn-primary' onClick={() => handleSubmitSignupForm()}>Sign up</button>
                             <div className='my-3'></div>
                             <hr />
                         </div>
@@ -74,4 +119,4 @@ function signup(props) {
     );
 }
 
-export default signup;
+export default Signup;
