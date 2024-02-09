@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import db from '../models/index';
-import { Op } from 'sequelize';
 
 const SALT_ROUND = bcrypt.genSaltSync(10);
 

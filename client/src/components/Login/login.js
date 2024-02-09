@@ -1,10 +1,11 @@
 import { React, useState } from 'react';
 import './login.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserService from '../../services/userService';
 
 function Login(props) {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -31,6 +32,12 @@ function Login(props) {
             toast.error(response.errMsg);
         } else {
             toast.success(response.errMsg);
+            let data = {
+                isAuthenticated: true,
+                token: 'fake token'
+            };
+            sessionStorage.setItem('account', JSON.stringify(data));
+            navigate('/users');
         }
     }
 

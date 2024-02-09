@@ -9,6 +9,7 @@ function Nav(props) {
             <NavLink to="/">Home</NavLink>
             <NavLink to="/news">News</NavLink>
             <NavLink to="/login">Login</NavLink>
+            <NavLink to="/users">Users</NavLink>
             <NavLink to="/contact">Contact</NavLink>
             <NavLink to="/about">About</NavLink>
         </div>
