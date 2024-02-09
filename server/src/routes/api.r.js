@@ -18,6 +18,7 @@ const initAPIRoutes = (app) => {
 
     //POST
     router.post('/signup', APIController.postSignup);
+    router.post('/login', APIController.postLogin);
 
     return app.use('/api/v1/', router);
 }

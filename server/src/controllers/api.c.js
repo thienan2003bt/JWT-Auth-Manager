@@ -36,7 +36,32 @@ const postSignup = async (req, res, next) => {
     }
 }
 
+const postLogin = async (req, res, next) => {
+    try {
+        if (!req.body?.email || !req.body?.password) {
+            return res.json({
+                errCode: '-1',
+                errMsg: 'Missing required parameters',
+                data: ''
+            });
+        }
+
+
+        let newUser = await UserClientService.handleLogin(req.body);
+
+
+        return res.status(200).json({
+            errCode: newUser.errCode,
+            errMsg: newUser.errMsg,
+            data: newUser.data
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getTestAPI,
     postSignup,
+    postLogin
 };
