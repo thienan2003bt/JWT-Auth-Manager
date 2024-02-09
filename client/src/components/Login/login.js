@@ -9,6 +9,12 @@ function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const handlePressEnter = (e) => {
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            handleLoginForm();
+        }
+    }
+
     const handleLoginForm = async () => {
         if (!email) {
             toast.error("Email is required");
@@ -38,6 +44,7 @@ function Login(props) {
             };
             sessionStorage.setItem('account', JSON.stringify(data));
             navigate('/users');
+            window.location.reload();
         }
     }
 
@@ -69,7 +76,8 @@ function Login(props) {
                         <input type="text" className="form-control" placeholder="Email address: " required
                             id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <input type="password" className="form-control" placeholder="Password: " required
-                            id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                            onKeyDown={(e) => handlePressEnter(e)} />
 
                         <div className="text-center">
                             <button type="submit" className='btn btn-primary' onClick={() => handleLoginForm()}>Login</button>
