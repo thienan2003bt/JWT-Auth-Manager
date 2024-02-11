@@ -1,11 +1,8 @@
 import './App.scss';
 import Nav from './components/Navigation/nav.js';
-import { Routes, Route } from 'react-router-dom';
-import Login from './components/Login/login.js';
-import Signup from './components/Signup/signup.js';
+import IndexRoute from './routes/IndexRoute.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Users from './components/ManageUser/Users.js';
 import _ from 'lodash';
 import { useState, useEffect } from 'react';
 
@@ -21,32 +18,14 @@ function App() {
 
   return (
     <div className="App">
-      {
-        account && !_.isEmpty(account) && account.isAuthenticated
-        && <Nav />
-      }
-      <div>
-        <Routes>
-          <Route path="/" element="Home">
-          </Route>
+      <div className='app-header'>
+        <Nav />
+      </div>
 
-          <Route path="/news" element="News">
-          </Route>
-          <Route path="/login" element={<Login />}>
-          </Route>
-          <Route path="/signup" element={<Signup />}>
-          </Route>
-          <Route path="/users" element={<Users />}>
-          </Route>
-          <Route path="/about" element="about">
-          </Route>
-          <Route path="/contact" element="contact">
-          </Route>
-          <Route path="*" element="404 Not Found">
-          </Route>
+      <div className='app-container'>
+        <IndexRoute />
 
 
-        </Routes>
         <ToastContainer
           position="bottom-right"
           autoClose={3000}

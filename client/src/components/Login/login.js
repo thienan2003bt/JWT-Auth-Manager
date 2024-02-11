@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import './login.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -8,6 +8,14 @@ function Login(props) {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        let session = sessionStorage.getItem('account');
+        if (session) {
+            toast.info("You have been logged in already");
+            navigate('/');
+        }
+    });
 
     const handlePressEnter = (e) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
