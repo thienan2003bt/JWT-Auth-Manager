@@ -34,7 +34,7 @@ const createNewUser = async (newUser) => {
             return {
                 errCode: '-1',
                 errMsg: 'The email is already in use',
-                errData: null,
+                data: null,
             }
         }
 
@@ -51,7 +51,7 @@ const createNewUser = async (newUser) => {
         return {
             errCode: '0',
             errMsg: 'New user is created successfully',
-            errData: null,
+            data: null,
         }
 
     } catch (error) {
@@ -59,7 +59,7 @@ const createNewUser = async (newUser) => {
         return {
             errCode: '-2',
             errMsg: 'Something wrong creating new user ...',
-            errData: null,
+            data: null,
         }
     }
 
@@ -78,7 +78,7 @@ const handleLogin = async (rawUser) => {
             return {
                 errCode: '-1',
                 errMsg: 'Email or password is incorrect',
-                errData: null,
+                data: null,
             }
         }
 
@@ -87,13 +87,13 @@ const handleLogin = async (rawUser) => {
             return {
                 errCode: '0',
                 errMsg: 'Login successfully',
-                errData: null,
+                data: null,
             }
         } else {
             return {
                 errCode: '-1',
                 errMsg: 'Email or password is incorrect',
-                errData: null,
+                data: null,
             }
         }
 
@@ -102,12 +102,97 @@ const handleLogin = async (rawUser) => {
         return {
             errCode: '-2',
             errMsg: 'Something wrong logging user ...',
-            errData: null,
+            data: null,
         }
     }
 }
 
+const showUserList = async () => {
+    try {
+        let userList = await db.User.findAll({
+            attributes: ["id", "email", "username", "phone", "sex", "address"],
+            include: { model: db.Group, attributes: ["name", "description"] },
+            nest: true
+        });
+        if (userList) {
+            userList = userList.map((user) => {
+                let returnedUser = {
+                    ...user.dataValues,
+                    password: null,
+                }
+
+                return returnedUser;
+            });
+            return {
+                errCode: '0',
+                errMsg: 'Get all users successfully',
+                data: userList,
+            }
+        } else {
+            return {
+                errCode: '-2',
+                errMsg: 'Something wrong getting all users ...',
+                data: null,
+            }
+        }
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+        return {
+            errCode: '-2',
+            errMsg: 'Something wrong getting all users ...',
+            data: null,
+        }
+    }
+};
+
+const updateUser = async (data) => {
+    try {
+        let user = await db.User.findOne({
+            where: {
+                id: data.id,
+            }
+        });
+
+        if (user) {
+            await db.User.update();
+        } else {
+            //TODO: Not found
+        }
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+        return {
+            errCode: '-2',
+            errMsg: 'Something wrong updating user ...',
+            data: null,
+        }
+    }
+};
+
+const deleteUser = async (userID) => {
+    try {
+        let response = await db.User.delete({
+            where: {
+                id: userID
+            }
+        })
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+        return {
+            errCode: '-2',
+            errMsg: 'Something wrong deleting user ...',
+            data: null,
+        }
+    }
+};
+
+
 module.exports = {
     createNewUser,
-    handleLogin
+    handleLogin,
+    showUserList,
+    updateUser,
+    deleteUser,
 };
