@@ -1,25 +1,37 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
+import { useNavigate } from 'react-router-dom';
 import UserService from '../../services/userService';
+
+import './Users.scss';
 
 function Users(props) {
     const navigate = useNavigate();
 
     const [userList, setUserList] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [currentLimit, setCurrentLimit] = useState(1);
 
-
+    const [totalPage, setTotalPageCount] = useState(50);
 
     useEffect(() => {
-        const fetchAllUsers = async () => {
-            let response = await UserService.fetchAllUsers();
+        const fetchAllUsers = async (page) => {
+            let response = await UserService.fetchAllUsers(page ? page : currentPage, currentLimit);
             if (response && response.data && response.data.errCode === '0') {
-                setUserList(response.data.data);
+                response.data = response.data.data;
+                setUserList(response.data.userList);
+                setTotalPageCount(response.data.totalPage);
             }
         }
 
         fetchAllUsers();
-    });
+    }, [currentPage]);
+
+    const handlePageClick = async (event) => {
+        const newOffset = parseInt(event.selected) + 1;
+        setCurrentPage(newOffset);
+    };
+
 
     return (
         <div className='container manage-users-container'>
@@ -39,21 +51,25 @@ function Users(props) {
 
                 <table className='table table-bordered table-hover'>
                     <thead>
-                        <th scope='col'>#</th>
-                        <th scope='col'>User ID</th>
-                        <th scope='col'>Email</th>
-                        <th scope='col'>Username</th>
-                        <th scope='col'>Sex</th>
-                        <th scope='col'>Phone</th>
-                        <th scope='col'>Address</th>
-                        <th scope='col'>Group</th>
+                        <tr>
+
+                            <th scope='col'>#</th>
+                            <th scope='col'>User ID</th>
+                            <th scope='col'>Email</th>
+                            <th scope='col'>Username</th>
+                            <th scope='col'>Sex</th>
+                            <th scope='col'>Phone</th>
+                            <th scope='col'>Address</th>
+                            <th scope='col'>Group</th>
+                            <th>Actions</th>
+                        </tr>
                     </thead>
 
                     <tbody>
                         {userList && userList.length > 0
                             ? <>
                                 {userList.map((user, index) => {
-                                    return <tr>
+                                    return <tr key={index}>
                                         <td scope='row'>{index}</td>
                                         <td>{user.id}</td>
                                         <td>{user.email}</td>
@@ -62,24 +78,39 @@ function Users(props) {
                                         <td>{user.phone}</td>
                                         <td>{user.address}</td>
                                         <td>{user.Group?.name} - {user.Group?.description}</td>
+                                        <td>
+                                            <button className='btn btn-warning mx-2'>Edit</button>
+                                            <button className='btn btn-danger mx-2'>Delete</button>
+                                        </td>
                                     </tr>
                                 })}
                             </>
-                            : <p>Not found Users</p>}
+                            : <tr><td><p>Not found Users</p></td></tr>}
                     </tbody>
                 </table>
 
 
                 <div className='user-footer'>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                            <li class="page-item"><Link class="page-link" to="#">Previous</Link></li>
-                            <li class="page-item"><Link class="page-link" to="#">1</Link></li>
-                            <li class="page-item"><Link class="page-link" to="#">2</Link></li>
-                            <li class="page-item"><Link class="page-link" to="#">3</Link></li>
-                            <li class="page-item"><Link class="page-link" to="#">Next</Link></li>
-                        </ul>
-                    </nav>
+                    <ReactPaginate
+                        containerClassName='pagination justify-content-center' //important
+                        activeClassName='active'
+                        breakLabel="..."
+                        nextLabel="Next ->"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={totalPage}
+                        previousLabel="<- Previous"
+                        pageClassName='page-item'
+                        pageLinkClassName='page-link'
+                        breakClassName='page-item'
+                        breakLinkClassName='page-link'
+                        previousClassName='page-item'
+                        previousLinkClassName='page-link'
+                        nextClassName='page-item'
+                        nextLinkClassName='page-link'
+                        renderOnZeroPageCount={null}
+                    />
                 </div>
 
             </div>

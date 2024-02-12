@@ -146,6 +146,50 @@ const showUserList = async () => {
     }
 };
 
+const showUserListWithPagination = async (page, limit) => {
+    page = parseInt(page);
+    limit = parseInt(limit);
+    let offset = (page - 1) * limit;
+    try {
+        const { count, rows } = await db.User.findAndCountAll({
+            attributes: ["id", "email", "username", "phone", "sex", "address"],
+            include: { model: db.Group, attributes: ["name", "description"] },
+            nest: true,
+            offset: offset,
+            limit: limit
+        });
+
+        if (count && rows) {
+            let data = {
+                total: count,
+                totalPage: Math.ceil(count / limit),
+                userList: rows
+            }
+
+            return {
+                errCode: '0',
+                errMsg: 'Get all users successfully',
+                data: data,
+            }
+        } else {
+            return {
+                errCode: '-1',
+                errMsg: 'Something wrong getting all users with pagination ...',
+                data: null,
+            }
+        }
+
+    } catch (error) {
+        console.log("Error: ", error.message);
+        return {
+            errCode: '-2',
+            errMsg: 'Something wrong getting all users  with pagination ...',
+            data: null,
+        }
+    }
+};
+
+
 const updateUser = async (data) => {
     try {
         let user = await db.User.findOne({
@@ -193,6 +237,7 @@ module.exports = {
     createNewUser,
     handleLogin,
     showUserList,
+    showUserListWithPagination,
     updateUser,
     deleteUser,
 };

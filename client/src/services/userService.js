@@ -16,8 +16,8 @@ const handleLogin = async (email, password) => {
     return response;
 }
 
-const fetchAllUsers = async () => {
-    const response = await axios.get('http://localhost:8080/api/v1/user/show');
+const fetchAllUsers = async (page, limit) => {
+    const response = await axios.get(`http://localhost:8080/api/v1/user/show?page=${page}&limit=${limit}`);
 
     return response;
 }
