@@ -16,9 +16,16 @@ const handleLogin = async (email, password) => {
     return response;
 }
 
+const fetchAllUsers = async () => {
+    const response = await axios.get('http://localhost:8080/api/v1/user/show');
+
+    return response;
+}
+
 let UserService = {
     createNewUser,
-    handleLogin
+    handleLogin,
+    fetchAllUsers,
 }
 
 export default UserService;
