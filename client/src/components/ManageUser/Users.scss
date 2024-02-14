@@ -1,1 +1,6 @@
 
+.modal-content-body {
+    & .red {
+        color: red;
+    }
+}

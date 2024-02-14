@@ -32,11 +32,20 @@ const deleteUser = async (userID) => {
     return response;
 }
 
+const fetchAllGroups = async () => {
+    const response = await axios.get(`http://localhost:8080/api/v1/group/show`);
+
+    return response;
+}
+
+
+
 let UserService = {
     createNewUser,
     handleLogin,
     fetchAllUsers,
-    deleteUser
+    deleteUser,
+    fetchAllGroups
 }
 
 export default UserService;

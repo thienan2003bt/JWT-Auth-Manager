@@ -4,6 +4,7 @@ import UserService from '../../services/userService';
 import { toast } from 'react-toastify'
 import './Users.scss';
 import ModalDelete from './ModalDelete';
+import ModalUser from './ModalUser';
 
 function Users(props) {
 
@@ -11,6 +12,7 @@ function Users(props) {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentLimit, setCurrentLimit] = useState(3);
     const [showModalDelete, setShowModalDelete] = useState(false);
+    const [showModalUser, setShowModalUser] = useState(false);
 
     const [totalPage, setTotalPageCount] = useState(50);
     const [dataModal, setDataModal] = useState(null);
@@ -39,8 +41,16 @@ function Users(props) {
         setShowModalDelete(true);
     }
 
+    const handleCreateUser = async () => {
+        setShowModalUser(true);
+    }
+
     const handleCloseModalDelete = async () => {
         setShowModalDelete(false);
+        setDataModal(null);
+    }
+    const handleCloseModalUser = async () => {
+        setShowModalUser(false);
         setDataModal(null);
     }
 
@@ -69,8 +79,8 @@ function Users(props) {
                     </div>
 
                     <div className='actions'>
-                        <button className='btn btn-success'>Refresh</button>
-                        <button className='btn btn-primary'>Add new user</button>
+                        <button className='btn btn-success mx-2 mb-3'>Refresh</button>
+                        <button className='btn btn-primary mx-2 mb-3' onClick={handleCreateUser}>Add new user</button>
                     </div>
 
                 </div>
@@ -149,6 +159,7 @@ function Users(props) {
             </div>
 
             <ModalDelete show={showModalDelete} dataModal={dataModal} handleClose={handleCloseModalDelete} handleDelete={handleConfirmModalDelete} />
+            <ModalUser title="Create new user" show={showModalUser} dataModal={dataModal} handleClose={handleCloseModalUser} handleSave={handleConfirmModalDelete} />
         </div>
     );
 }

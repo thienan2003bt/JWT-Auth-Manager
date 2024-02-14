@@ -3,7 +3,7 @@ const router = express.Router();
 
 import APIController from '../controllers/api.c';
 import UserController from '../controllers/user.c';
-
+import GroupController from '../controllers/group.c';
 /**
  * 
  * @param {*} app - express app
@@ -15,6 +15,7 @@ const initAPIRoutes = (app) => {
     //GET
     router.get('/test-api', APIController.getTestAPI);
     router.get('/user/show', UserController.showUserList);
+    router.get('/group/show', GroupController.getAllGroups);
 
     //POST
     router.post('/signup', APIController.postSignup);
