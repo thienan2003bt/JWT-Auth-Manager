@@ -3,7 +3,6 @@ import Nav from './components/Navigation/nav.js';
 import IndexRoute from './routes/IndexRoute.js';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import _ from 'lodash';
 import { useState, useEffect } from 'react';
 
 function App() {

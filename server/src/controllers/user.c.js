@@ -17,7 +17,7 @@ const showUserList = async (req, res, next) => {
     }
 };
 
-const createNewUser = async (rqe, res, next) => {
+const createNewUser = async (req, res, next) => {
     try {
 
     } catch (error) {
@@ -25,7 +25,7 @@ const createNewUser = async (rqe, res, next) => {
     }
 };
 
-const updateUser = async (rqe, res, next) => {
+const updateUser = async (req, res, next) => {
     try {
 
     } catch (error) {
@@ -33,9 +33,10 @@ const updateUser = async (rqe, res, next) => {
     }
 };
 
-const deleteUser = async (rqe, res, next) => {
+const deleteUser = async (req, res, next) => {
     try {
-
+        let response = await UserClientService.deleteUser(req.body?.id);
+        return res.status(200).json(response);
     } catch (error) {
         next(error);
     }

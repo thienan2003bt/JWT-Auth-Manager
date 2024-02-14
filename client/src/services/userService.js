@@ -22,10 +22,21 @@ const fetchAllUsers = async (page, limit) => {
     return response;
 }
 
+
+const deleteUser = async (userID) => {
+    const response = await axios.delete(`http://localhost:8080/api/v1/user/delete`, {
+        data: {
+            id: userID
+        }
+    });
+    return response;
+}
+
 let UserService = {
     createNewUser,
     handleLogin,
     fetchAllUsers,
+    deleteUser
 }
 
 export default UserService;

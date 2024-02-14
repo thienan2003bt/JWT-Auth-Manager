@@ -216,11 +216,34 @@ const updateUser = async (data) => {
 
 const deleteUser = async (userID) => {
     try {
-        let response = await db.User.delete({
+        if (!userID) {
+            return {
+                errCode: '-1',
+                errMsg: 'User id is required',
+                data: null,
+            }
+        }
+
+        let user = await db.User.findOne({
             where: {
                 id: userID
             }
-        })
+        });
+
+        if (user) {
+            await user.destroy();
+            return {
+                errCode: '0',
+                errMsg: 'Delete user successfully',
+                data: null,
+            }
+        } else {
+            return {
+                errCode: '-1',
+                errMsg: 'Something wrong getting user by id to delete ...',
+                data: null,
+            }
+        }
 
     } catch (error) {
         console.log("Error: ", error.message);

@@ -45,7 +45,6 @@ function Login(props) {
         if (response.errCode !== '0') {
             toast.error(response.errMsg);
         } else {
-            toast.success(response.errMsg);
             let data = {
                 isAuthenticated: true,
                 token: 'fake token'
@@ -53,6 +52,7 @@ function Login(props) {
             sessionStorage.setItem('account', JSON.stringify(data));
             navigate('/users');
             window.location.reload();
+            toast.success(response.errMsg);
         }
     }
 
