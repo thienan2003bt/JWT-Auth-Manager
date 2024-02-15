@@ -45,7 +45,11 @@ function ModalUser(props) {
     };
 
     const checkValidate = () => {
-        let options = ['email', 'phone', 'password', 'username', 'gender', 'address', 'group'];
+        if (action === 'EDIT') {
+            return true;
+        }
+
+        let options = ['email', 'phone', 'password', 'username', 'gender', 'group'];
         let state = true;
         for (let i = 0; i < options.length; i++) {
             let attrName = options[i];
@@ -68,7 +72,14 @@ function ModalUser(props) {
     const handleConfirm = async () => {
         let validState = checkValidate();
         if (validState === true) {
-            let response = await UserService.createNewUserByModal(userData);
+            let response = null;
+
+            if (action === 'CREATE') {
+                response = await UserService.createNewUserByModal(userData);
+            } else {
+                response = await UserService.updateUser(userData);
+            }
+
             if (response && response.data && response.data.errCode === '0') {
                 toast.success(response.data.errMsg);
                 handleSave();
@@ -76,8 +87,11 @@ function ModalUser(props) {
                 setUserData(defaultUserData);
                 handleClose();
             } else {
-                toast.error("Error creating new user ...");
-                toast.error(response.data.errMsg);
+                if (action === 'CREATE') {
+                    toast.error("Error creating new user: " + response.data.errMsg);
+                } else {
+                    toast.error("Error updating user: " + response.data.errMsg);
+                }
             }
         }
     }
@@ -113,7 +127,7 @@ function ModalUser(props) {
                 setUserData(defaultUserData);
             }
         }
-    }, [dataModal]);
+    }, [action, dataModal]);
 
     return (
         <>

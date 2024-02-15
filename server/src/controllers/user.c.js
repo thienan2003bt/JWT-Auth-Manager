@@ -28,7 +28,8 @@ const createNewUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     try {
-
+        let response = await UserClientService.updateUser(req.body);
+        return res.status(200).json(response);
     } catch (error) {
         next(error);
     }

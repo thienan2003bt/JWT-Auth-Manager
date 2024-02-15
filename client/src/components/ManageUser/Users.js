@@ -32,6 +32,11 @@ function Users(props) {
         }
     }
 
+    const handleRefresh = async () => {
+        await fetchAllUsers();
+        toast.success("User data is up to date");
+    }
+
     const handlePageClick = async (event) => {
         const newOffset = parseInt(event.selected) + 1;
         setCurrentPage(newOffset);
@@ -90,12 +95,18 @@ function Users(props) {
             <div className='manage-users-container'>
                 <div className='user-header'>
                     <div className='title'>
-                        <h3 >Table of Users</h3>
+                        <h3 className='my-2'>Manage users</h3>
                     </div>
 
                     <div className='actions'>
-                        <button className='btn btn-success mx-2 mb-3'>Refresh</button>
-                        <button className='btn btn-primary mx-2 mb-3' onClick={handleCreateUser}>Add new user</button>
+                        <button className='btn btn-success mx-2 mb-3' onClick={() => handleRefresh()}>
+                            <i class="fa fa-refresh pe-1" ></i>
+                            Refresh
+                        </button>
+                        <button className='btn btn-primary mx-2 mb-3' onClick={handleCreateUser}>
+                            <i class="fa fa-plus pe-1"></i>
+                            Add new user
+                        </button>
                     </div>
 
                 </div>
@@ -123,7 +134,7 @@ function Users(props) {
                                 ? <>
                                     {userList.map((user, index) => {
                                         return <tr key={index}>
-                                            <td scope='row'>{currentLimit * (currentPage - 1) + index + 1}</td>
+                                            <td>{currentLimit * (currentPage - 1) + index + 1}</td>
                                             <td>{user.id}</td>
                                             <td>{user.email}</td>
                                             <td>{user.username}</td>
@@ -132,13 +143,14 @@ function Users(props) {
                                             <td>{user.address}</td>
                                             <td>{user.Group?.name} - {user.Group?.description}</td>
                                             <td>
-                                                <button id="edit-btn" className='btn btn-warning mx-2'
+                                                <button title='Edit a user' id="edit-btn" className='btn btn-warning mx-1'
                                                     onClick={() => handleUpdateUser(user)}>
-                                                    Edit
+                                                    <i className="fa fa-pencil-square" ></i>
                                                 </button>
-                                                <button id="delete-btn" className='btn btn-danger mx-2'
+                                                <button title='Delete a user' id="delete-btn" className='btn btn-danger mx-1'
                                                     onClick={() => handleDeleteUser(user.id)}>
-                                                    Delete
+                                                    <i class="fa fa-trash-o"></i>
+
                                                 </button>
                                             </td>
                                         </tr>

@@ -6,6 +6,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 // Bootstrap
 import 'bootstrap/dist/css/bootstrap.min.css';
+//Font Awesome
+import 'font-awesome/css/font-awesome.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

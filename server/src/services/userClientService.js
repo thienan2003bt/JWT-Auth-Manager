@@ -192,6 +192,14 @@ const showUserListWithPagination = async (page, limit) => {
 
 
 const updateUser = async (data) => {
+    if (!data.group) {
+        return {
+            errCode: '-1',
+            errMsg: 'Group is required',
+            data: null,
+        }
+    }
+
     try {
         let user = await db.User.findOne({
             where: {
@@ -200,9 +208,23 @@ const updateUser = async (data) => {
         });
 
         if (user) {
-            await db.User.update();
+            await user.update({
+                ...data,
+                email: user.email,
+            });
+
+            return {
+                errCode: '0',
+                errMsg: 'Update user successfully',
+                data: null,
+            }
         } else {
             //TODO: Not found
+            return {
+                errCode: '-1',
+                errMsg: 'User not found',
+                data: null,
+            }
         }
 
     } catch (error) {
