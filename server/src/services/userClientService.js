@@ -109,7 +109,7 @@ const showUserList = async () => {
     try {
         let userList = await db.User.findAll({
             attributes: ["id", "email", "username", "phone", "sex", "address"],
-            include: { model: db.Group, attributes: ["name", "description"] },
+            include: { model: db.Group, attributes: ["name", "description", "id"] },
             nest: true
         });
         if (userList) {
@@ -151,10 +151,13 @@ const showUserListWithPagination = async (page, limit) => {
     try {
         const { count, rows } = await db.User.findAndCountAll({
             attributes: ["id", "email", "username", "phone", "sex", "address"],
-            include: { model: db.Group, attributes: ["name", "description"] },
+            include: { model: db.Group, attributes: ["name", "description", "id"] },
             nest: true,
             offset: offset,
-            limit: limit
+            limit: limit,
+            order: [
+                ['id', 'DESC'],
+            ]
         });
 
         if (count && rows) {

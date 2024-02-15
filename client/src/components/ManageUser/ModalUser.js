@@ -8,9 +8,10 @@ import _ from 'lodash';
 
 
 function ModalUser(props) {
-    const { title, show, dataModal, handleClose, handleSave } = props;
+    const { action, show, dataModal, handleClose, handleSave } = props;
     const [userGroupList, setUserGroupList] = useState([]);
 
+    const title = (action === "CREATE" ? "Create new user" : "Update user");
     const defaultUserData = {
         email: '',
         password: '',
@@ -95,7 +96,24 @@ function ModalUser(props) {
 
     useEffect(() => {
         fetchAllGroups();
-    }, [userGroupList]);
+    }, []);
+
+    useEffect(() => {
+        if (action === "EDIT") {
+            if (dataModal) {
+
+                setUserData({
+                    ...dataModal,
+                    group: dataModal.Group?.id || '4',
+                    gender: dataModal?.sex || 'Male',
+                    phone: dataModal?.phone || '',
+                    address: dataModal?.address || '',
+                });
+            } else {
+                setUserData(defaultUserData);
+            }
+        }
+    }, [dataModal]);
 
     return (
         <>
@@ -106,47 +124,55 @@ function ModalUser(props) {
                 <Modal.Body>
                     <div className='modal-content-body row'>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Email <span className='red'>(*)</span>: </label>
+                            <label htmlFor="email">Email <span className='red'>(*)</span>: </label>
                             <input className={validInput.email === true ? "form-control" : "form-control is-invalid"}
-                                type="email" name="email"
+                                type="email" id="email" name="email" disabled={action === "CREATE" ? false : true}
+
                                 value={userData.email} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Phone number <span className='red'>(*)</span>: </label>
+                            <label htmlFor="phone">Phone number <span className='red'>(*)</span>: </label>
                             <input className={validInput.phone === true ? "form-control" : "form-control is-invalid"}
-                                type="text" name="phone"
+                                type="text" name="phone" id="phone"
                                 value={userData.phone} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Username <span className='red'>(*)</span>: </label>
+                            <label htmlFor="username">Username <span className='red'>(*)</span>: </label>
                             <input className={validInput.username === true ? "form-control" : "form-control is-invalid"}
-                                type="text" name="username"
+                                type="text" name="username" id="username"
                                 value={userData.username} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Password: <span className='red'>(*)</span>: </label>
-                            <input className={validInput.password === true ? "form-control" : "form-control is-invalid"}
-                                type="password" name="password"
-                                value={userData.password} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
+                            {action === "CREATE" &&
+                                <>
+                                    <label htmlFor="password">Password: <span className='red'>(*)</span>: </label>
+                                    <input className={validInput.password === true ? "form-control" : "form-control is-invalid"}
+                                        type="password" name="password" id="password"
+                                        value={userData.password} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
+                                </>
+                            }
+
                         </div>
                         <div className='col-12 form-group'>
-                            <label>Address: </label>
+                            <label htmlFor="address">Address: </label>
                             <input className={validInput.address === true ? "form-control" : "form-control is-invalid"}
-                                type="text" name="address"
+                                type="text" name="address" id="address"
                                 value={userData.address} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)} />
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Sex: <span className='red'>(*)</span>: </label>
-                            <select className={validInput.gender === true ? "form-select" : "form-select is-invalid"} name="gender"
+                            <label htmlFor="gender">Sex: <span className='red'>(*)</span>: </label>
+                            <select className={validInput.gender === true ? "form-select" : "form-select is-invalid"}
+                                name="gender" id="gender"
                                 value={userData.gender} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)}>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
                         <div className='col-12 col-sm-6 form-group'>
-                            <label>Group <span className='red'>(*)</span>: </label>
-                            <select className={validInput.group === true ? "form-select" : "form-select is-invalid"} name="group"
+                            <label htmlFor="group">Group <span className='red'>(*)</span>: </label>
+                            <select className={validInput.group === true ? "form-select" : "form-select is-invalid"}
+                                name="group" id="group"
                                 value={userData.group} onChange={(e) => handleOnChangeInput(e.target.value, e.target.name)}>
                                 {userGroupList && userGroupList.length > 0 && userGroupList.map((group, index) => {
                                     return (<option key={index} value={group.id}>
