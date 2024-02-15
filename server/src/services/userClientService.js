@@ -42,9 +42,7 @@ const createNewUser = async (newUser) => {
         let hashedPassword = await hashUserPassword(newUser.password);
 
         await db.User.create({
-            email: newUser.email,
-            username: newUser.username,
-            phone: newUser.phone,
+            ...newUser,
             password: hashedPassword,
         });
 

@@ -69,6 +69,10 @@ function Users(props) {
         setDataModal(null);
     }
 
+    const handleSaveModalUser = async () => {
+        fetchAllUsers();
+    };
+
 
     return (
         <div className='container'>
@@ -159,7 +163,7 @@ function Users(props) {
             </div>
 
             <ModalDelete show={showModalDelete} dataModal={dataModal} handleClose={handleCloseModalDelete} handleDelete={handleConfirmModalDelete} />
-            <ModalUser title="Create new user" show={showModalUser} dataModal={dataModal} handleClose={handleCloseModalUser} handleSave={handleConfirmModalDelete} />
+            <ModalUser title="Create new user" show={showModalUser} dataModal={dataModal} handleClose={handleCloseModalUser} handleSave={handleSaveModalUser} />
         </div>
     );
 }

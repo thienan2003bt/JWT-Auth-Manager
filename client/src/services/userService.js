@@ -38,6 +38,18 @@ const fetchAllGroups = async () => {
     return response;
 }
 
+const createNewUserByModal = async (user) => {
+
+
+    const response = await axios.post(`http://localhost:8080/api/v1/user/create`, {
+        ...user,
+        sex: user?.gender,
+        groupId: user?.group
+    });
+
+    return response;
+}
+
 
 
 let UserService = {
@@ -45,7 +57,8 @@ let UserService = {
     handleLogin,
     fetchAllUsers,
     deleteUser,
-    fetchAllGroups
+    fetchAllGroups,
+    createNewUserByModal
 }
 
 export default UserService;
