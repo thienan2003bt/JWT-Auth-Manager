@@ -1,17 +1,33 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import './nav.scss';
 import { NavLink } from 'react-router-dom';
 
 
 function Nav(props) {
+    const [isNavShow, setNavShow] = useState(true);
+
+    useEffect(() => {
+        let session = sessionStorage.getItem('account');
+
+        if (!session) {
+            setNavShow(false);
+        }
+    }, []);
+
     return (
-        <div className="topnav">
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/news">News</NavLink>
-            <NavLink to="/login">Login</NavLink>
-            <NavLink to="/contact">Contact</NavLink>
-            <NavLink to="/about">About</NavLink>
-        </div>
+        <>
+            <div className="topnav">
+                <NavLink to="/">Home</NavLink>
+                <NavLink to="/login">Login</NavLink>
+                {isNavShow === true &&
+                    <>
+                        <NavLink to="/users">Users</NavLink>
+                        <NavLink to="/projects">Projects</NavLink>
+                    </>
+                }
+            </div>
+        </>
+
     );
 }
 

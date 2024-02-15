@@ -1,8 +1,60 @@
-import React from 'react';
+import { React, useEffect, useState } from 'react';
 import './login.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import UserService from '../../services/userService';
 
 function Login(props) {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        let session = sessionStorage.getItem('account');
+        if (session) {
+            toast.info("You have been logged in already");
+            navigate('/');
+        }
+    });
+
+    const handlePressEnter = (e) => {
+        if (e.code === "Enter" || e.code === "NumpadEnter") {
+            handleLoginForm();
+        }
+    }
+
+    const handleLoginForm = async () => {
+        if (!email) {
+            toast.error("Email is required");
+            return;
+        }
+        const emailRegex = /\S+@\S+\.\S+/;
+
+        if (!emailRegex.test(email)) {
+            toast.error("Enter invalid email address");
+            return false;
+        }
+
+        if (!password) {
+            toast.error("Password is required");
+            return;
+        }
+
+        let response = await UserService.handleLogin(email, password);
+        if (response.errCode !== '0') {
+            toast.error(response.errMsg);
+        } else {
+            let data = {
+                isAuthenticated: true,
+                token: 'fake token'
+            };
+            sessionStorage.setItem('account', JSON.stringify(data));
+            navigate('/users');
+            window.location.reload();
+            toast.success(response.errMsg);
+        }
+    }
+
     return (
         <div className='login-container d-flex flex-column justify-content-center'>
             <div className='container'>
@@ -28,11 +80,14 @@ function Login(props) {
                         </div>
 
                         <h1 className='title'>Login Form</h1>
-                        <input type="text" className="form-control" placeholder="Email address or your phone number" />
-                        <input type="password" className="form-control" placeholder="Password" />
+                        <input type="text" className="form-control" placeholder="Email address: " required
+                            id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="password" className="form-control" placeholder="Password: " required
+                            id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                            onKeyDown={(e) => handlePressEnter(e)} />
 
                         <div className="text-center">
-                            <button type="submit" className='btn btn-primary'>Login</button>
+                            <button type="submit" className='btn btn-primary' onClick={() => handleLoginForm()}>Login</button>
                             <div className='my-3'></div>
                             <a href="/reset-password" className="text-center forgot-password">Forgot password ?</a>
                             <hr />

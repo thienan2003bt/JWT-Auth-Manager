@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import UserService from '../../services/userService';
 import './signup.scss';
-import axios from 'axios';
 
 function Signup(props) {
 
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [username, setUsername] = useState('');
@@ -67,25 +68,22 @@ function Signup(props) {
     }
 
     const handleSubmitSignupForm = async () => {
-        // let userData = {
-        //     "email": email,
-        //     "phone": phone,
-        //     username,
-        //     password
-        // };
 
         let state = validateSignupForm();
-        if (state) {
+        if (state === true) {
             try {
-                const response = await axios.post('http://localhost:8080/api/v1/signup', {
-                    email, username, phone, password
-                });
-                console.log(response.data); // Example usage of response data
+                let response = await UserService.createNewUser(email, username, phone, password);
+
+                if (response.errCode === '0') {
+                    toast.success(response.errMsg);
+                    navigate("/login");
+                } else {
+                    toast.error(response.errMsg);
+
+                }
             } catch (error) {
                 console.error('Error posting data:', error);
             }
-        } else {
-            toast.success("User data get successfully");
         }
     }
 
