@@ -73,7 +73,6 @@ function Signup(props) {
         if (state === true) {
             try {
                 let response = await UserService.createNewUser(email, username, phone, password);
-                response = response.data;
 
                 if (response.errCode === '0') {
                     toast.success(response.errMsg);

@@ -16,14 +16,16 @@ function Nav(props) {
 
     return (
         <>
-            {isNavShow === true &&
-                <div className="topnav">
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/login">Login</NavLink>
-                    <NavLink to="/users">Users</NavLink>
-                    <NavLink to="/projects">Projects</NavLink>
-                </div>
-            }
+            <div className="topnav">
+                <NavLink to="/">Home</NavLink>
+                <NavLink to="/login">Login</NavLink>
+                {isNavShow === true &&
+                    <>
+                        <NavLink to="/users">Users</NavLink>
+                        <NavLink to="/projects">Projects</NavLink>
+                    </>
+                }
+            </div>
         </>
 
     );

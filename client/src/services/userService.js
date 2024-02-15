@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from "../setup/axios";
 
 const createNewUser = async (email, username, phone, password) => {
-    const response = await axios.post('http://localhost:8080/api/v1/signup', {
+    const response = await axios.post('/api/v1/signup', {
         email, username, phone, password
     });
 
@@ -9,7 +9,7 @@ const createNewUser = async (email, username, phone, password) => {
 }
 
 const handleLogin = async (email, password) => {
-    const response = await axios.post('http://localhost:8080/api/v1/login', {
+    const response = await axios.post('/api/v1/login', {
         email, password
     });
 
@@ -17,14 +17,14 @@ const handleLogin = async (email, password) => {
 }
 
 const fetchAllUsers = async (page, limit) => {
-    const response = await axios.get(`http://localhost:8080/api/v1/user/show?page=${page}&limit=${limit}`);
+    const response = await axios.get(`/api/v1/user/show?page=${page}&limit=${limit}`);
 
     return response;
 }
 
 
 const deleteUser = async (userID) => {
-    const response = await axios.delete(`http://localhost:8080/api/v1/user/delete`, {
+    const response = await axios.delete(`/api/v1/user/delete`, {
         data: {
             id: userID
         }
@@ -33,13 +33,13 @@ const deleteUser = async (userID) => {
 }
 
 const fetchAllGroups = async () => {
-    const response = await axios.get(`http://localhost:8080/api/v1/group/show`);
+    const response = await axios.get(`/api/v1/group/show`);
 
     return response;
 }
 
 const createNewUserByModal = async (user) => {
-    const response = await axios.post(`http://localhost:8080/api/v1/user/create`, {
+    const response = await axios.post(`/api/v1/user/create`, {
         ...user,
         sex: user?.gender,
         groupId: user?.group
@@ -49,7 +49,7 @@ const createNewUserByModal = async (user) => {
 }
 
 const updateUser = async (user) => {
-    const response = await axios.put(`http://localhost:8080/api/v1/user/update`, {
+    const response = await axios.put(`/api/v1/user/update`, {
         ...user,
         sex: user?.gender,
         groupId: user?.group

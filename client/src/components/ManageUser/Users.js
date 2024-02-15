@@ -25,10 +25,10 @@ function Users(props) {
 
     const fetchAllUsers = async (page) => {
         let response = await UserService.fetchAllUsers(page ? page : currentPage, currentLimit);
-        if (response && response.data && response.data.errCode === '0') {
-            response.data = response.data.data;
-            setUserList(response.data.userList);
-            setTotalPageCount(response.data.totalPage);
+        if (response && response && response.errCode === '0') {
+            response = response.data;
+            setUserList(response.userList);
+            setTotalPageCount(response.totalPage);
         }
     }
 
@@ -72,13 +72,13 @@ function Users(props) {
 
     const handleConfirmModalDelete = async () => {
         let response = await UserService.deleteUser(dataModal);
-        if (response && response.data && response.data.errCode === '0') {
-            toast.success(response.data.errMsg);
+        if (response && response && response.errCode === '0') {
+            toast.success(response.errMsg);
             await fetchAllUsers();
         } else {
             toast.error("Error deleting user");
-            if (response && response.data) {
-                toast.error(response.data.errMsg);
+            if (response && response) {
+                toast.error(response.errMsg);
             }
         }
         setShowModalDelete(false);
@@ -100,13 +100,22 @@ function Users(props) {
 
                     <div className='actions'>
                         <button className='btn btn-success mx-2 mb-3' onClick={() => handleRefresh()}>
-                            <i class="fa fa-refresh pe-1" ></i>
+                            <i className="fa fa-refresh pe-1" ></i>
                             Refresh
                         </button>
                         <button className='btn btn-primary mx-2 mb-3' onClick={handleCreateUser}>
-                            <i class="fa fa-plus pe-1"></i>
+                            <i className="fa fa-plus pe-1"></i>
                             Add new user
                         </button>
+                        <div className='row mb-3 d-flex flex-row flex-wrap justify-content-center'>
+                            <label htmlFor='limit' className='limit-label' >Set limit per page: </label>
+                            <select id='limit' name='limit' value={currentLimit} onChange={(e) => setCurrentLimit(e.target.value)} className="form-select" >
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
                     </div>
 
                 </div>
@@ -149,7 +158,7 @@ function Users(props) {
                                                 </button>
                                                 <button title='Delete a user' id="delete-btn" className='btn btn-danger mx-1'
                                                     onClick={() => handleDeleteUser(user.id)}>
-                                                    <i class="fa fa-trash-o"></i>
+                                                    <i className="fa fa-trash-o"></i>
 
                                                 </button>
                                             </td>

@@ -41,7 +41,6 @@ function Login(props) {
         }
 
         let response = await UserService.handleLogin(email, password);
-        response = response.data;
         if (response.errCode !== '0') {
             toast.error(response.errMsg);
         } else {

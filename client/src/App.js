@@ -5,32 +5,30 @@ import Nav from './components/Navigation/nav.js';
 import IndexRoute from './routes/IndexRoute.js';
 
 function App() {
+    return (
+        <div className="App">
+            <div className='app-header'>
+                <Nav />
+            </div>
 
-  return (
-    <div className="App">
-      <div className='app-header'>
-        <Nav />
-      </div>
+            <div className='app-container'>
+                <IndexRoute />
 
-      <div className='app-container'>
-        <IndexRoute />
-
-
-        <ToastContainer
-          position="bottom-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-      </div>
-    </div >
-  );
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                />
+            </div>
+        </div >
+    );
 }
 
 export default App;

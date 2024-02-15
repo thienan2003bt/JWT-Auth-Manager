@@ -80,17 +80,17 @@ function ModalUser(props) {
                 response = await UserService.updateUser(userData);
             }
 
-            if (response && response.data && response.data.errCode === '0') {
-                toast.success(response.data.errMsg);
+            if (response && response.errCode === '0') {
+                toast.success(response.errMsg);
                 handleSave();
 
                 setUserData(defaultUserData);
                 handleClose();
             } else {
                 if (action === 'CREATE') {
-                    toast.error("Error creating new user: " + response.data.errMsg);
+                    toast.error("Error creating new user: " + response.errMsg);
                 } else {
-                    toast.error("Error updating user: " + response.data.errMsg);
+                    toast.error("Error updating user: " + response.errMsg);
                 }
             }
         }
@@ -98,12 +98,12 @@ function ModalUser(props) {
 
     const fetchAllGroups = async () => {
         let response = await UserService.fetchAllGroups();
-        if (response && response.data && response.data.errCode === '0') {
-            setUserGroupList(response.data.data);
+        if (response && response && response.errCode === '0') {
+            setUserGroupList(response.data);
         } else {
             toast.error("Error fetching groups");
-            if (response && response.data) {
-                toast.error(response.data.errMsg);
+            if (response && response) {
+                toast.error(response.errMsg);
             }
         }
     }
