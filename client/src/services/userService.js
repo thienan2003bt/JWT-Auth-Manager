@@ -2,7 +2,8 @@ import axios from "../setup/axios";
 
 const createNewUser = async (email, username, phone, password) => {
     const response = await axios.post('/api/v1/signup', {
-        email, username, phone, password
+        email, username, phone, password,
+        groupId: '5' //Guest by default
     });
 
     return response;
