@@ -46,10 +46,9 @@ const postLogin = async (req, res, next) => {
             });
         }
 
-
         let newUser = await UserClientService.handleLogin(req.body);
 
-
+        res.cookie("accessToken", newUser.data?.accessToken, { httpOnly: true, maxAge: 60 * 60 * 1000 }); //1h
         return res.status(200).json({
             errCode: newUser.errCode,
             errMsg: newUser.errMsg,

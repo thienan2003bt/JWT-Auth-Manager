@@ -43,10 +43,81 @@ const signToken = (payload) => {
     return token;
 }
 
+const checkUser = (req, res, next) => {
+    let cookies = req.cookies;
+    if (cookies && cookies.accessToken) {
+        let token = cookies.accessToken;
+
+        try {
+            let decoded = verifyToken(token);
+            if (decoded) {
+                req.user = decoded;
+
+                return next();
+            } else {
+                return res.status(401).json({
+                    errCode: '-2',
+                    errMsg: 'Unauthenticated user',
+                    data: null,
+                })
+            }
+        } catch (error) {
+            return res.status(500).json({
+                errCode: '-2',
+                errMsg: 'Service error: ' + error.message,
+                data: null,
+            })
+        }
+    } else {
+        return res.status(401).json({
+            errCode: '-3',
+            errMsg: 'Unauthenticated user',
+            data: null,
+        })
+    }
+}
+
+const checkUserPermission = (req, res, next) => {
+    if (req.user) {
+        let { group_role_list } = req.user;
+
+        let roleList = group_role_list.Roles;
+        if (!roleList && roleList.length <= 0) {
+            return res.status(403).json({
+                errCode: '-3',
+                errMsg: 'You do not have permission to access this resource',
+                data: null,
+            })
+        }
+        let currentURL = req.path;
+
+        let matchURL = roleList.some(item => item.url === currentURL);
+        if (matchURL) {
+            return next();
+        } else {
+            return res.status(403).json({
+                errCode: '-2',
+                errMsg: 'You do not have permission to access this resource',
+                data: null,
+            })
+        }
+
+    } else {
+        return res.status(401).json({
+            errCode: '-3',
+            errMsg: 'Unauthenticated user',
+            data: null,
+        })
+    }
+}
+
+
 const JWTMiddleware = {
     verifyToken,
     signJWTSample,
     signToken,
+    checkUser,
+    checkUserPermission,
 }
 
 
