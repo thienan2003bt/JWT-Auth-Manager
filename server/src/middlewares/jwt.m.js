@@ -43,6 +43,15 @@ const signToken = (payload) => {
     return token;
 }
 
+const extractToken = (req) => {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+        return req.headers.authorization.split(' ')[1];
+    }
+
+    return req.query?.token;
+}
+
+
 const nonSecurePaths = ['/test-api', '/signup', '/login', '/account'];
 
 const checkUser = (req, res, next) => {
@@ -50,8 +59,10 @@ const checkUser = (req, res, next) => {
         return next();
     }
     let cookies = req.cookies;
-    if (cookies && cookies.accessToken) {
-        let token = cookies.accessToken;
+    const tokenFromHeader = extractToken(req);
+
+    if ((cookies && cookies.accessToken) || tokenFromHeader) {
+        let token = cookies.accessToken ? cookies.accessToken : tokenFromHeader;
 
         try {
             let decoded = verifyToken(token);

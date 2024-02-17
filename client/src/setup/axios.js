@@ -9,6 +9,8 @@ const instance = axios.create({
 //for sending cookies to client side
 instance.defaults.withCredentials = true;
 
+instance.defaults.headers.common['Authorization'] = `Bearer ` + localStorage.getItem('accessToken');
+
 //Request interceptor
 instance.interceptors.request.use((config) => {
     return config;

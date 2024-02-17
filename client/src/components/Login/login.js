@@ -50,6 +50,7 @@ function Login(props) {
             };
 
             loginContext(data);
+            localStorage.setItem('accessToken', accessToken);
             navigate('/users');
             toast.success(response.errMsg);
         }
