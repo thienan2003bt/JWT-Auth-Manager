@@ -89,6 +89,7 @@ const handleLogin = async (rawUser) => {
             let payload = {
                 email: existingUser.email,
                 group_role_list: group_role_list,
+                username: existingUser.username,
             }
 
             let accessToken = await JWTController.signToken(payload);

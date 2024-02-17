@@ -16,7 +16,7 @@ const initAPIRoutes = (app) => {
     router.get('/test-api', APIController.getTestAPI);
     router.get('/user/show', UserController.showUserList);
     router.get('/group/show', GroupController.getAllGroups);
-
+    router.get('/account', UserController.getUserAccount);
     //POST
     router.post('/signup', APIController.postSignup);
     router.post('/login', APIController.postLogin);

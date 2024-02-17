@@ -13,20 +13,28 @@ instance.defaults.withCredentials = true;
 instance.interceptors.request.use((config) => {
     return config;
 }, (err) => {
-    const status = err?.response?.status || 500;
+    return Promise.reject(err);
+});
+
+
+//Response interceptor
+instance.interceptors.response.use((response) => {
+    return response.data;
+}, (err) => {
+    console.log("err" + err.message);
+    const status = err?.response?.status;
     console.log("status: " + status);
     switch (status) {
         //Unauthorized
         case 401: {
             toast.error("Unauthorized user. Please login ...");
-            return Promise.reject(err.message);
-
+            return Promise.reject(err);
         }
 
         // forbidden (permission related issues)
         case 403: {
-            toast.error("You do not have permission to access this resource");
-            return Promise.reject(err.message);
+            toast.error("You do not have permission to access this resource ...");
+            return Promise.reject(err);
         }
 
         // bad request
@@ -55,14 +63,6 @@ instance.interceptors.request.use((config) => {
         }
     }
 
-});
-
-
-//Response interceptor
-instance.interceptors.response.use((response) => {
-    return response.data;
-}, (error) => {
-    return Promise.reject(error);
 });
 
 export default instance;

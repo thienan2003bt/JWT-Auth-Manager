@@ -19,8 +19,6 @@ const showUserList = async (req, res, next) => {
 
 const createNewUser = async (req, res, next) => {
     try {
-        console.log('Have reached create user logic');
-        console.log("User: " + JSON.stringify(req.body));
         let response = await UserClientService.createNewUser(req.body);
         return res.status(200).json(response);
     } catch (error) {
@@ -46,9 +44,22 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+const getUserAccount = async (req, res, next) => {
+    return res.status(200).json({
+        errCode: '0',
+        errMsg: 'User account is available',
+        data: {
+            accessToken: req.token,
+            ...req.user,
+        }
+    })
+}
+
+
 module.exports = {
     showUserList,
     createNewUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserAccount
 };

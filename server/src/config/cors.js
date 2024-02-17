@@ -7,6 +7,9 @@ const configCORS = (app) => {
         res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
         res.setHeader('Access-Control-Allow-Credentials', true);
 
+        if (req.method === 'OPTIONS') {
+            return res.status(200).end();
+        }
         next();
     })
 }

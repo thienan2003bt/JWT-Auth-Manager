@@ -59,6 +59,11 @@ const updateUser = async (user) => {
     return response;
 }
 
+const getUserAccount = async () => {
+    const response = await axios.get(`/api/v1/account`);
+
+    return response;
+}
 
 let UserService = {
     createNewUser,
@@ -67,7 +72,8 @@ let UserService = {
     deleteUser,
     fetchAllGroups,
     createNewUserByModal,
-    updateUser
+    updateUser,
+    getUserAccount,
 }
 
 export default UserService;

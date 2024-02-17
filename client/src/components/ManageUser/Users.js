@@ -104,7 +104,7 @@ function Users(props) {
     }
 
     const handleSaveModalUser = async () => {
-        fetchAllUsers();
+        await fetchAllUsers();
     };
 
 

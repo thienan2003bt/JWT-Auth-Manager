@@ -13,13 +13,6 @@ function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    useEffect(() => {
-        let session = sessionStorage.getItem('account');
-        if (session) {
-            toast.info("You have been logged in already");
-            navigate('/');
-        }
-    });
 
     const handlePressEnter = (e) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
@@ -55,11 +48,9 @@ function Login(props) {
                 token: accessToken,
                 account: { group_role_list, email, username }
             };
-            sessionStorage.setItem('account', JSON.stringify(data));
 
             loginContext(data);
             navigate('/users');
-            //window.location.reload();
             toast.success(response.errMsg);
         }
     }

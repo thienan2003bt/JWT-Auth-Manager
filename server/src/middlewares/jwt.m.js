@@ -43,10 +43,10 @@ const signToken = (payload) => {
     return token;
 }
 
-const nonSecurePaths = ['/test-api', '/signup', '/login'];
+const nonSecurePaths = ['/test-api', '/signup', '/login', '/account'];
 
 const checkUser = (req, res, next) => {
-    if (nonSecurePaths.includes(req.path)) {
+    if (nonSecurePaths.includes(req.path) && req.path !== '/account') {
         return next();
     }
     let cookies = req.cookies;
@@ -57,7 +57,7 @@ const checkUser = (req, res, next) => {
             let decoded = verifyToken(token);
             if (decoded) {
                 req.user = decoded;
-
+                req.token = token;
                 return next();
             } else {
                 return res.status(401).json({
