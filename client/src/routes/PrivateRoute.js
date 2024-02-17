@@ -1,15 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+import { UserContext } from '../context/UserProvider';
 function PrivateRoute(props) {
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const { children } = props;
     let auth = true;
 
     useEffect(() => {
+        console.log("Check context user: ");
+        console.log(user);
         let session = sessionStorage.getItem('account');
 
         if (!session) {

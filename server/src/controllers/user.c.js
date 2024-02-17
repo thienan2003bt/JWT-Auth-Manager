@@ -19,6 +19,8 @@ const showUserList = async (req, res, next) => {
 
 const createNewUser = async (req, res, next) => {
     try {
+        console.log('Have reached create user logic');
+        console.log("User: " + JSON.stringify(req.body));
         let response = await UserClientService.createNewUser(req.body);
         return res.status(200).json(response);
     } catch (error) {

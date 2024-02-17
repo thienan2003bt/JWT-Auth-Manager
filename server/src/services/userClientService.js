@@ -96,7 +96,10 @@ const handleLogin = async (rawUser) => {
                 errCode: '0',
                 errMsg: 'Login successfully',
                 data: {
-                    accessToken
+                    accessToken,
+                    group_role_list,
+                    email: existingUser.email,
+                    username: existingUser.username,
                 },
             }
         } else {

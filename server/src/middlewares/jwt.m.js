@@ -43,7 +43,12 @@ const signToken = (payload) => {
     return token;
 }
 
+const nonSecurePaths = ['/test-api', '/signup', '/login'];
+
 const checkUser = (req, res, next) => {
+    if (nonSecurePaths.includes(req.path)) {
+        return next();
+    }
     let cookies = req.cookies;
     if (cookies && cookies.accessToken) {
         let token = cookies.accessToken;
@@ -78,6 +83,9 @@ const checkUser = (req, res, next) => {
 }
 
 const checkUserPermission = (req, res, next) => {
+    if (nonSecurePaths.includes(req.path)) {
+        return next();
+    }
     if (req.user) {
         let { group_role_list } = req.user;
 
@@ -91,7 +99,11 @@ const checkUserPermission = (req, res, next) => {
         }
         let currentURL = req.path;
 
-        let matchURL = roleList.some(item => item.url === currentURL);
+        let matchURL = roleList.some(item => {
+            let state = item.url === currentURL;
+            //console.log(`Current URL: ${currentURL} versus item: ${item.url}`);
+            return state;
+        });
         if (matchURL) {
             return next();
         } else {

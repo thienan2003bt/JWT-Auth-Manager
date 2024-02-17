@@ -1,10 +1,14 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import './login.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserService from '../../services/userService';
 
+import { UserContext } from '../../context/UserProvider';
+
 function Login(props) {
+    const { loginContext } = useContext(UserContext);
+
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -44,13 +48,18 @@ function Login(props) {
         if (response.errCode !== '0') {
             toast.error(response.errMsg);
         } else {
+            let { group_role_list, email, username, accessToken } = response.data;
+
             let data = {
                 isAuthenticated: true,
-                token: 'fake token'
+                token: accessToken,
+                account: { group_role_list, email, username }
             };
             sessionStorage.setItem('account', JSON.stringify(data));
+
+            loginContext(data);
             navigate('/users');
-            window.location.reload();
+            //window.location.reload();
             toast.success(response.errMsg);
         }
     }

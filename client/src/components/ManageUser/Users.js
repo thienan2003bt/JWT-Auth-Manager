@@ -6,7 +6,11 @@ import './Users.scss';
 import ModalDelete from './ModalDelete';
 import ModalUser from './ModalUser';
 
+import { UserContext } from '../../context/UserProvider';
+
 function Users(props) {
+
+    const { user } = React.useContext(UserContext);
 
     const [userList, setUserList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,9 +25,12 @@ function Users(props) {
     useEffect(() => {
 
         fetchAllUsers();
+
     }, [currentPage]);
 
     const fetchAllUsers = async (page) => {
+
+
         let state = false;
         try {
             let response = await UserService.fetchAllUsers(page ? page : currentPage, currentLimit);
