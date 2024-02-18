@@ -16,7 +16,7 @@ function UserProvider(props) {
     const defaultUser = {
         isLoading: true,
         token: '',
-        isAuthenticated: true,
+        isAuthenticated: false,
         account: {},
     };
 
@@ -29,10 +29,10 @@ function UserProvider(props) {
         });
     }
 
-    const logout = () => {
+    const logoutContext = () => {
         setUser({
             ...defaultUser,
-            isAuthenticated: false,
+            isLoading: false
         });
     }
 
@@ -73,7 +73,7 @@ function UserProvider(props) {
 
     return (
         <div>
-            <UserContext.Provider value={{ user, loginContext, logout }}>
+            <UserContext.Provider value={{ user, loginContext, logoutContext }}>
                 {children}
             </UserContext.Provider>
         </div>

@@ -20,6 +20,7 @@ const initAPIRoutes = (app) => {
     //POST
     router.post('/signup', APIController.postSignup);
     router.post('/login', APIController.postLogin);
+    router.post('/logout', APIController.postLogout);
     router.post('/user/create', UserController.createNewUser);
 
     //PUT

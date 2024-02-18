@@ -65,6 +65,12 @@ const getUserAccount = async () => {
     return response;
 }
 
+const handleLogout = async () => {
+    const response = await axios.post(`/api/v1/logout`);
+
+    return response;
+}
+
 let UserService = {
     createNewUser,
     handleLogin,
@@ -74,6 +80,7 @@ let UserService = {
     createNewUserByModal,
     updateUser,
     getUserAccount,
+    handleLogout
 }
 
 export default UserService;

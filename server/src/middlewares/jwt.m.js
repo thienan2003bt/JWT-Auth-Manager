@@ -52,7 +52,7 @@ const extractToken = (req) => {
 }
 
 
-const nonSecurePaths = ['/test-api', '/signup', '/login', '/account'];
+const nonSecurePaths = ['/test-api', '/signup', '/login', '/logout', '/account'];
 
 const checkUser = (req, res, next) => {
     if (nonSecurePaths.includes(req.path) && req.path !== '/account') {

@@ -23,9 +23,7 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use((response) => {
     return response.data;
 }, (err) => {
-    console.log("err" + err.message);
     const status = err?.response?.status;
-    console.log("status: " + status);
     switch (status) {
         //Unauthorized
         case 401: {

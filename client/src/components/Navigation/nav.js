@@ -5,12 +5,33 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from 'react-bootstrap/Navbar';
 import { UserContext } from '../../context/UserProvider';
 import './nav.scss';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import logo from '../../logo.svg';
+import UserService from '../../services/userService';
+import { toast } from 'react-toastify';
 
 function NavHeader(props) {
-    const { user } = useContext(UserContext);
+    const { user, logoutContext } = useContext(UserContext);
     const account = user?.account;
+    const navigate = useNavigate();
+
+    const handleLogoutUser = async () => {
+        try {
+            let data = await UserService.handleLogout();
+            if (data && data.errCode === '0') {
+                localStorage.removeItem('accessToken');
+                logoutContext();
+                toast.success(data.errMsg);
+                navigate('/')
+            } else {
+                toast.error("Error logging out: " + data?.errMsg);
+            }
+        } catch (error) {
+            toast.error("Error logging out: " + error);
+        }
+
+    }
+
     return (
         <>
             <div className='nav-header'>
@@ -29,7 +50,6 @@ function NavHeader(props) {
                         <Navbar.Collapse id="basic-navbar-nav">
                             <Nav variant="pills" className="me-auto">
                                 <NavLink to="/">Home</NavLink>
-                                <NavLink to="/login">Login</NavLink>
                                 {(user && user.isAuthenticated === true) &&
                                     <>
                                         <NavLink to="/users">Users</NavLink>
@@ -40,15 +60,29 @@ function NavHeader(props) {
                             </Nav>
 
                             <Nav variant="pills">
-                                <Nav.Item className='nav-link nav-item'>
-                                    Welcome, <strong>{account.username ? account.username : "anonymous"}</strong> !
-                                </Nav.Item>
-                                <NavDropdown title="Settings" id="basic-nav-dropdown" menuVariant='dark'>
-                                    <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.2">Change password</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Log out</NavDropdown.Item>
-                                </NavDropdown>
+                                <Nav.Item>IsAuthenticated: {user.isAuthenticated}</Nav.Item>
+                                {(user && user.isAuthenticated === true)
+                                    ?
+                                    <><Nav.Item className='nav-link nav-item'>
+                                        Welcome, <strong>{account.username}</strong> !
+                                    </Nav.Item>
+                                        <NavDropdown title="Settings" id="basic-nav-dropdown" menuVariant='dark'>
+                                            <NavDropdown.Item href="#action/3.1">Profile</NavDropdown.Item>
+                                            <NavDropdown.Item>Change password</NavDropdown.Item>
+                                            <NavDropdown.Divider />
+
+                                            <NavDropdown.Item>
+                                                <span onClick={() => handleLogoutUser()}>Log out</span>
+                                            </NavDropdown.Item>
+                                        </NavDropdown>
+                                    </>
+                                    : <>
+                                        <NavLink to="/login">Login</NavLink>
+                                        <NavLink to="/signup">Signup</NavLink>
+                                    </>
+                                }
+
+
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
