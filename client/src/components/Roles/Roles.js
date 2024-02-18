@@ -3,11 +3,12 @@ import _ from 'lodash';
 import './roles.scss';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
+import RoleService from '../../services/roleService';
 
 function Roles(props) {
 
     const defaultRoleList = {
-        child1: { url: '', description: '' }
+        child1: { url: '', description: '', isValidURL: true }
     };
     const [roleList, setRoleList] = useState(defaultRoleList);
 
@@ -16,6 +17,10 @@ function Roles(props) {
         let _roleList = _.cloneDeep(roleList);
         _roleList[key][name] = value;
 
+        if (name === 'url' && value && _roleList[key]['isValidURL'] === false) {
+            _roleList[key]['isValidURL'] = true;
+        }
+
         setRoleList(_roleList);
     }
 
@@ -23,7 +28,7 @@ function Roles(props) {
         toast.success("Add new role input successfully");
         let _roleList = _.cloneDeep(roleList);
         _roleList[`child${uuidv4()}`] = {
-            url: '', description: ''
+            url: '', description: '', isValidURL: true
         };
         setRoleList(_roleList);
 
@@ -41,6 +46,41 @@ function Roles(props) {
         setRoleList(_roleList);
     }
 
+
+    const buildDataToPersist = () => {
+        let _roleList = _.cloneDeep(roleList);
+        let data = [];
+        Object.entries(_roleList).map(([key, child], index) => {
+            data.push({ url: child.url, description: child.description });
+        });
+
+        return data;
+    }
+
+    const handleSave = async () => {
+        let invalidObj = Object.entries(roleList).find(([key, child], index) => {
+            return child && !child.url;
+        });
+
+        if (!invalidObj) {
+            let data = buildDataToPersist();
+            let response = await RoleService.createNewRole(data);
+            if (response && response.data && response.errCode === '0') {
+                toast.success(response.errMsg);
+            } else {
+                toast.error("Error creating role: " + response?.errMsg);
+            }
+        } else {
+            toast.error("URL is required")
+            let _roleList = _.cloneDeep(roleList);
+            _roleList[invalidObj[0]]['isValidURL'] = false;
+
+            setRoleList(_roleList);
+        }
+    }
+
+
+
     return (
         <div className='role-container'>
             <div className='container'>
@@ -53,7 +93,8 @@ function Roles(props) {
                                     <div className='row role-child my-2' key={`child${key}`}>
                                         <div className='col-5 form-group'>
                                             <label>URL: </label>
-                                            <input type='text' className='form-control' name='url' id='url'
+                                            <input type='text' name='url' id='url'
+                                                className={child.isValidURL ? 'form-control' : 'form-control is-invalid'}
                                                 value={child.url} onChange={(e) => handleOnChangeInput(e.target.name, key, e.target.value)} />
                                         </div>
                                         <div className='col-5 form-group'>
@@ -79,7 +120,7 @@ function Roles(props) {
 
 
                         <div className='container'>
-                            <button className='btn btn-warning mt-3'>Save</button>
+                            <button className='btn btn-warning mt-3' onClick={() => handleSave()}>Save</button>
                         </div>
 
                     </div>
