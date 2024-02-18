@@ -66,6 +66,8 @@ function UserProvider(props) {
         const nonFetchPath = ['/', '/login'];
         if (!nonFetchPath.includes(window.location.pathname)) {
             fetchUser();
+        } else {
+            setUser({ ...defaultUser, isLoading: false });
         }
     }, []);
 

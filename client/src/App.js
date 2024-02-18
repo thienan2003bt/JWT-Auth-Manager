@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.scss';
-import Nav from './components/Navigation/nav.js';
+import NavHeader from './components/Navigation/nav.js';
 import IndexRoute from './routes/IndexRoute.js';
 import { UserContext } from './context/UserProvider.js';
 import { Rings } from 'react-loader-spinner';
@@ -22,7 +22,7 @@ function App() {
                 </div>
                 : <>
                     <div className='app-header'>
-                        <Nav />
+                        <NavHeader />
                     </div>
 
                     <div className='app-container'>
