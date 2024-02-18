@@ -53,7 +53,7 @@ function NavHeader(props) {
                                 {(user && user.isAuthenticated === true) &&
                                     <>
                                         <NavLink to="/users">Users</NavLink>
-
+                                        <NavLink to="/roles">Roles</NavLink>
                                         <NavLink to="/projects">Projects</NavLink>
                                     </>
                                 }
