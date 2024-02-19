@@ -1,13 +1,31 @@
 import db from '../models/index';
 import _ from 'lodash';
 
-const showRoleList = async () => {
+const showRoleList = async (groupID) => {
     try {
-        let data = await db.Role.findAll({
-            attributes: ['id', 'url', 'description'],
-            raw: true,
-            order: [['id', 'desc']]
-        });
+        let data = [];
+        if (groupID) {
+            data = await db.Group.findAll({
+                where: {
+                    id: groupID
+                },
+                include: {
+                    model: db.Role,
+                    attributes: ['id', 'url', 'description'],
+                    order: [['id', 'desc']],
+                    through: { attributes: [] },
+                },
+                attributes: ['id', 'name', 'description'],
+                raw: true,
+                nest: true
+            });
+        } else {
+            data = await db.Role.findAll({
+                attributes: ['id', 'url', 'description'],
+                raw: true,
+                order: [['id', 'desc']]
+            });
+        }
 
         return {
             errCode: '0',

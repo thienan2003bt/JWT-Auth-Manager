@@ -6,6 +6,7 @@ import Users from '../components/ManageUser/Users.js';
 import Signup from '../components/Signup/signup.js';
 import PrivateRoute from './PrivateRoute.js';
 import Roles from '../components/Roles/Roles.js';
+import GroupRole from '../components/GroupRole/GroupRole.js';
 
 function IndexRoute(props) {
     return (
@@ -26,6 +27,12 @@ function IndexRoute(props) {
                 <Route path="/roles" element={
                     <PrivateRoute>
                         <Roles />
+                    </PrivateRoute>
+                } >
+                </Route>
+                <Route path="/group-role" element={
+                    <PrivateRoute>
+                        <GroupRole />
                     </PrivateRoute>
                 } >
                 </Route>

@@ -2,7 +2,8 @@ import RoleService from '../services/roleService';
 
 const showRoleList = async (req, res, next) => {
     try {
-        let response = await RoleService.showRoleList();
+        let groupID = req.query?.groupID;
+        let response = await RoleService.showRoleList(groupID);
         return res.status(200).json(response);
     } catch (error) {
         next(error);

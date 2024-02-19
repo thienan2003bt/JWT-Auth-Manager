@@ -60,7 +60,7 @@ function Login(props) {
         <div className='login-container d-flex flex-column justify-content-center'>
             <div className='container'>
                 <div className='row px-sm-1 px-3'>
-                    <div className='container-left red col-sm-7 d-none d-sm-flex flex-column justify-content-center align-items-start ps-3'>
+                    <div className='container-left col-sm-7 d-none d-sm-flex flex-column justify-content-center align-items-start ps-3'>
                         <div className='brand'>
                             <h1>
                                 JWT Human Resources Management

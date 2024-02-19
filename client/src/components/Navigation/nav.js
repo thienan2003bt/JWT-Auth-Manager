@@ -54,6 +54,7 @@ function NavHeader(props) {
                                     <>
                                         <NavLink to="/users">Users</NavLink>
                                         <NavLink to="/roles">Roles</NavLink>
+                                        <NavLink to="/group-role">Group-Role</NavLink>
                                         <NavLink to="/projects">Projects</NavLink>
                                     </>
                                 }

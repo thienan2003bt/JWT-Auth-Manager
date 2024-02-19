@@ -1,9 +1,16 @@
 import axios from "../setup/axios";
-const fetchAllRoles = async (page, limit) => {
+const fetchAllRoles = async () => {
     const response = await axios.get(`/api/v1/role/show`);
 
     return response;
 }
+
+const fetchRolesByGroup = async (groupID) => {
+    const response = await axios.get(`/api/v1/role/show?groupID=${groupID}`);
+
+    return response;
+}
+
 const createNewRole = async (newRoleData) => {
     const response = await axios.post('/api/v1/role/create', {
         ...newRoleData
@@ -30,6 +37,7 @@ const handleDeleteRole = async (roleID) => {
 
 let RoleService = {
     fetchAllRoles,
+    fetchRolesByGroup,
     createNewRole,
     handleUpdateRole,
     handleDeleteRole
