@@ -15,8 +15,6 @@
 ✅ Using **Axios** dependency for creating interface with backend.<br />
 ✅ Using **Lodash** dependency for deep cloning an object.<br />
 
-
-
 ### 📍BACKEND
 ✅ Using **NodeJS** platform + **Express** framework.<br />
 ✅ Using **Dotenv** dependency for creating environment constants.<br />
@@ -28,11 +26,8 @@
 ✅ Using **Jsonwebtoken** dependency for signing and verifiing token.<br />
 ✅ Using **Cookie parser** dependency for parsing and using request's cookies.<br />
 
-
-
 ### 📍DATABASE
 ✅ Using **MySQL** along with **Xampp** for storing database.<br />
-
 
 ## 📌 SETTING UP
 ✍️ Making **/server/.env** file, create some constants with name: *PORT, REACT_URL, JWT_SECRET_KEY, JWT_EXPIRATION*.<br />
