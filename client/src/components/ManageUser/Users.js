@@ -184,7 +184,7 @@ function Users(props) {
 
                                     })}
                                 </>
-                                : <tr><td><p>Not found Users</p></td></tr>}
+                                : <tr><td colSpan={9} className='text-center'><p>Not found Users</p></td></tr>}
                         </tbody>
                     </table>
 

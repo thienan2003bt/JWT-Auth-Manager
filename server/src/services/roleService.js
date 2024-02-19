@@ -1,6 +1,28 @@
 import db from '../models/index';
 import _ from 'lodash';
 
+const showRoleList = async () => {
+    try {
+        let data = await db.Role.findAll({
+            attributes: ['id', 'url', 'description'],
+            raw: true,
+            order: [['id', 'desc']]
+        });
+
+        return {
+            errCode: '0',
+            errMsg: 'All roles returned successfully',
+            data: data
+        }
+    } catch (error) {
+        return {
+            errCode: '-2',
+            errMsg: 'Service error: ' + error.message,
+            data: null
+        }
+    }
+}
+
 const createNewRole = async (newRoleData) => {
     try {
         let currentRoles = await db.Role.findAll({
@@ -48,7 +70,83 @@ const createNewRole = async (newRoleData) => {
     }
 }
 
+const updateRole = async (roleData) => {
+    try {
+        let role = await db.Role.findOne({
+            where: {
+                id: roleData.id,
+            }
+        });
+
+        if (role) {
+            await role.update({
+                ...roleData,
+            });
+
+            return {
+                errCode: '0',
+                errMsg: 'Update role successfully',
+                data: null,
+            }
+        } else {
+            //TODO: Not found
+            return {
+                errCode: '-1',
+                errMsg: 'Role not found',
+                data: null,
+            }
+        }
+    } catch (error) {
+        return {
+            errCode: '-2',
+            errMsg: 'Service error: ' + error.message,
+            data: null
+        }
+    }
+}
+
+const deleteRole = async (roleID) => {
+    try {
+        if (!roleID) {
+            return {
+                errCode: '-1',
+                errMsg: 'Role id is required',
+                data: null,
+            }
+        }
+
+        let role = await db.Role.findOne({
+            where: {
+                id: roleID
+            }
+        });
+
+        if (role) {
+            await role.destroy();
+            return {
+                errCode: '0',
+                errMsg: 'Delete role successfully',
+                data: null,
+            }
+        } else {
+            return {
+                errCode: '-1',
+                errMsg: 'Something wrong getting role by id to delete ...',
+                data: null,
+            }
+        }
+    } catch (error) {
+        return {
+            errCode: '-2',
+            errMsg: 'Service error: ' + error.message,
+            data: null
+        }
+    }
+}
 
 module.exports = {
     createNewRole,
+    showRoleList,
+    updateRole,
+    deleteRole
 }

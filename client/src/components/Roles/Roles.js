@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import _ from 'lodash';
 import './roles.scss';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import RoleService from '../../services/roleService';
+import TableRoles from './TableRoles';
 
 function Roles(props) {
 
@@ -11,7 +12,7 @@ function Roles(props) {
         child1: { url: '', description: '', isValidURL: true }
     };
     const [roleList, setRoleList] = useState(defaultRoleList);
-
+    const childRef = useRef();
 
     const handleOnChangeInput = (name, key, value) => {
         let _roleList = _.cloneDeep(roleList);
@@ -67,6 +68,7 @@ function Roles(props) {
             let response = await RoleService.createNewRole(data);
             if (response && response.data && response.errCode === '0') {
                 toast.success(response.errMsg);
+                childRef.current.fetchRoleListAgain();
             } else {
                 toast.error("Error creating role: " + response?.errMsg);
             }
@@ -84,7 +86,7 @@ function Roles(props) {
     return (
         <div className='role-container'>
             <div className='container'>
-                <div className='row mt-3'>
+                <div className='adding-role row mt-3'>
                     <h4 className='col-12 text-center'>Manage Roles</h4>
                     <div className='role-parent'>
                         {
@@ -125,7 +127,13 @@ function Roles(props) {
 
                     </div>
                 </div>
+                <hr />
+                <div className='mt-3'>
+                    <h4 className='text-center'>List of roles</h4>
+                    <TableRoles ref={childRef} />
+                </div>
             </div>
+
         </div>
     );
 }
