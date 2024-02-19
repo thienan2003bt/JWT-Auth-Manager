@@ -26,6 +26,7 @@ const initAPIRoutes = (app) => {
     router.post('/logout', APIController.postLogout);
     router.post('/user/create', UserController.createNewUser);
     router.post('/role/create', RoleController.createNewRole);
+    router.post('/role/assign-to-group', RoleController.assignRoleToGroup);
 
     //PUT
     router.put('/user/update', UserController.updateUser);

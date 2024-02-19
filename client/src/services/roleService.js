@@ -34,13 +34,21 @@ const handleDeleteRole = async (roleID) => {
     return response;
 }
 
+const assignRoleToGroup = async (data) => {
+
+    const response = await axios.post('/api/v1/role/assign-to-group', {
+        ...data
+    });
+    return response;
+}
 
 let RoleService = {
     fetchAllRoles,
     fetchRolesByGroup,
     createNewRole,
     handleUpdateRole,
-    handleDeleteRole
+    handleDeleteRole,
+    assignRoleToGroup
 }
 
 export default RoleService;

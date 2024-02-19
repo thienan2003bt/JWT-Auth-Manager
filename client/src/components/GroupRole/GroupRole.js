@@ -45,7 +45,6 @@ function GroupRole(props) {
             let response = await RoleService.fetchRolesByGroup(groupID);
             if (response && response && response.errCode === '0') {
                 let result = buildDataByGroup(response.data);
-                console.log(result);
                 setAssignRoleByGroup(result);
             } else {
                 toast.error("Error fetching groups: " + response?.errMsg);
@@ -99,6 +98,42 @@ function GroupRole(props) {
         setAssignRoleByGroup(_assignRoleByGroup);
     }
 
+    const buildDataToSave = () => {
+        let result = {};
+        const _assignRoleByGroup = _.cloneDeep(assignRoleByGroup);
+        result.groupId = selectedGroup;
+        let groupRoles = _assignRoleByGroup.filter((role) => role.isAssigned === true);
+
+        groupRoles = groupRoles.map((role) => {
+            return {
+                groupId: +result.groupId,
+                roleId: +role.id,
+            }
+        })
+
+        result.groupRoles = groupRoles;
+        return result;
+    }
+
+    const handleSave = async () => {
+        let data = buildDataToSave();
+        console.log("Check role data: ");
+        console.log(data);
+        try {
+            let response = await RoleService.assignRoleToGroup(data);
+            if (response && response.errCode === '0') {
+                toast.success(response.errMsg);
+                await fetchRolesByGroup(data.groupId);
+            } else {
+                toast.error("Error fetching roles: " + response?.errMsg);
+            }
+        } catch (error) {
+            toast.error("Error fetching roles: " + error.message);
+        }
+
+
+    }
+
     return (
         <div className='group-role-container'>
             <div className='container'>
@@ -134,7 +169,7 @@ function GroupRole(props) {
                         </div>
                     }
                     <div className='mt-3'>
-                        <button className='btn btn-warning'>Save</button>
+                        <button className='btn btn-warning' onClick={() => handleSave()}>Save</button>
                     </div>
 
                 </div>

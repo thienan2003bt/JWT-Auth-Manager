@@ -57,9 +57,24 @@ const deleteRole = async (req, res, next) => {
     }
 }
 
+const assignRoleToGroup = async (req, res, next) => {
+    try {
+        let response = await RoleService.assignRoleToGroup(req.body);
+        return res.status(200).json(response);
+    } catch (error) {
+        next(error);
+        return res.status(500).json({
+            errCode: '-3',
+            errMsg: 'Service error ...',
+            data: null,
+        });
+    }
+}
+
 module.exports = {
     showRoleList,
     createNewRole,
     updateRole,
-    deleteRole
+    deleteRole,
+    assignRoleToGroup
 };

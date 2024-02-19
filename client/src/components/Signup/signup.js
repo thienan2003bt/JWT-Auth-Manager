@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserService from '../../services/userService';
@@ -86,10 +86,6 @@ function Signup(props) {
             }
         }
     }
-
-    useEffect(() => {
-
-    }, []);
 
     return (
         <div className='signup-container d-flex flex-column justify-content-center'>

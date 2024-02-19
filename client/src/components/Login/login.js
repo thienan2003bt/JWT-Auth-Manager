@@ -7,12 +7,17 @@ import UserService from '../../services/userService';
 import { UserContext } from '../../context/UserProvider';
 
 function Login(props) {
-    const { loginContext } = useContext(UserContext);
+    const { user, loginContext } = useContext(UserContext);
 
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    useEffect(() => {
+        if (user && user.isAuthenticated === true) {
+            navigate('/');
+        }
+    })
 
     const handlePressEnter = (e) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
