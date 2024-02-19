@@ -44,9 +44,22 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+const getUserAccount = async (req, res, next) => {
+    return res.status(200).json({
+        errCode: '0',
+        errMsg: 'User account is available',
+        data: {
+            accessToken: req.token,
+            ...req.user,
+        }
+    })
+}
+
+
 module.exports = {
     showUserList,
     createNewUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserAccount
 };

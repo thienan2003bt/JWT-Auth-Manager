@@ -1,0 +1,12 @@
+.role-parent {
+    & label {
+        text-align: start;
+    }
+}
+
+.actions {
+    & button {
+        margin-right: 0.25rem;
+    }
+}
+

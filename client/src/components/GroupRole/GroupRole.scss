@@ -1,0 +1,15 @@
+.red {
+    color: red;
+}
+
+label {
+    margin: 0 !important;
+
+    &:hover {
+        color: #61dafb !important;
+    }
+}
+
+.role-check-input:checked + .role-check-label {
+    color: #61dafb !important;
+}

@@ -12,8 +12,6 @@ module.exports = {
     renderUserPage: async (req, res, next) => {
         let userList = await UserService.getUserList();
 
-        await UserService.deleteUser(5);
-
         return res.render('user.ejs', {
             userList: userList
         });

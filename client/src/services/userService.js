@@ -2,7 +2,8 @@ import axios from "../setup/axios";
 
 const createNewUser = async (email, username, phone, password) => {
     const response = await axios.post('/api/v1/signup', {
-        email, username, phone, password
+        email, username, phone, password,
+        groupId: '5' //Guest by default
     });
 
     return response;
@@ -58,6 +59,17 @@ const updateUser = async (user) => {
     return response;
 }
 
+const getUserAccount = async () => {
+    const response = await axios.get(`/api/v1/account`);
+
+    return response;
+}
+
+const handleLogout = async () => {
+    const response = await axios.post(`/api/v1/logout`);
+
+    return response;
+}
 
 let UserService = {
     createNewUser,
@@ -66,7 +78,9 @@ let UserService = {
     deleteUser,
     fetchAllGroups,
     createNewUserByModal,
-    updateUser
+    updateUser,
+    getUserAccount,
+    handleLogout
 }
 
 export default UserService;

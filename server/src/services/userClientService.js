@@ -1,5 +1,7 @@
-import bcrypt from 'bcrypt';
 import db from '../models/index';
+import bcrypt from 'bcrypt';
+import JWTController from '../middlewares/jwt.m';
+import JWTService from '../services/JWTService';
 
 const SALT_ROUND = bcrypt.genSaltSync(10);
 
@@ -82,10 +84,24 @@ const handleLogin = async (rawUser) => {
 
         let passwordState = await checkPassword(rawUser.password, existingUser.password);
         if (passwordState === true) {
+
+            let group_role_list = await JWTService.getGroupWithRoles(existingUser);
+            let payload = {
+                email: existingUser.email,
+                group_role_list: group_role_list,
+                username: existingUser.username,
+            }
+
+            let accessToken = await JWTController.signToken(payload);
             return {
                 errCode: '0',
                 errMsg: 'Login successfully',
-                data: null,
+                data: {
+                    accessToken,
+                    group_role_list,
+                    email: existingUser.email,
+                    username: existingUser.username,
+                },
             }
         } else {
             return {

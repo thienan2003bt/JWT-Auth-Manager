@@ -1,21 +1,23 @@
-import { React, useEffect, useState } from 'react';
+import { React, useContext, useEffect, useState } from 'react';
 import './login.scss';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserService from '../../services/userService';
 
+import { UserContext } from '../../context/UserProvider';
+
 function Login(props) {
+    const { user, loginContext } = useContext(UserContext);
+
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        let session = sessionStorage.getItem('account');
-        if (session) {
-            toast.info("You have been logged in already");
+        if (user && user.isAuthenticated === true) {
             navigate('/');
         }
-    });
+    })
 
     const handlePressEnter = (e) => {
         if (e.code === "Enter" || e.code === "NumpadEnter") {
@@ -44,13 +46,17 @@ function Login(props) {
         if (response.errCode !== '0') {
             toast.error(response.errMsg);
         } else {
+            let { group_role_list, email, username, accessToken } = response.data;
+
             let data = {
                 isAuthenticated: true,
-                token: 'fake token'
+                token: accessToken,
+                account: { group_role_list, email, username }
             };
-            sessionStorage.setItem('account', JSON.stringify(data));
+
+            loginContext(data);
+            localStorage.setItem('accessToken', accessToken);
             navigate('/users');
-            window.location.reload();
             toast.success(response.errMsg);
         }
     }
@@ -59,7 +65,7 @@ function Login(props) {
         <div className='login-container d-flex flex-column justify-content-center'>
             <div className='container'>
                 <div className='row px-sm-1 px-3'>
-                    <div className='container-left red col-sm-7 d-none d-sm-flex flex-column justify-content-center align-items-start ps-3'>
+                    <div className='container-left col-sm-7 d-none d-sm-flex flex-column justify-content-center align-items-start ps-3'>
                         <div className='brand'>
                             <h1>
                                 JWT Human Resources Management

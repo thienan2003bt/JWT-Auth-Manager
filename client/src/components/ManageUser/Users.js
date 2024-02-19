@@ -6,7 +6,11 @@ import './Users.scss';
 import ModalDelete from './ModalDelete';
 import ModalUser from './ModalUser';
 
+import { UserContext } from '../../context/UserProvider';
+
 function Users(props) {
+
+    const { user } = React.useContext(UserContext);
 
     const [userList, setUserList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -14,27 +18,41 @@ function Users(props) {
     const [showModalDelete, setShowModalDelete] = useState(false);
     const [showModalUser, setShowModalUser] = useState(false);
 
-    const [totalPage, setTotalPageCount] = useState(50);
+    const [totalPage, setTotalPageCount] = useState(10);
     const [dataModal, setDataModal] = useState(null);
     const [actionModalUser, setActionModalUser] = useState('');
 
     useEffect(() => {
 
         fetchAllUsers();
+
     }, [currentPage]);
 
     const fetchAllUsers = async (page) => {
-        let response = await UserService.fetchAllUsers(page ? page : currentPage, currentLimit);
-        if (response && response && response.errCode === '0') {
-            response = response.data;
-            setUserList(response.userList);
-            setTotalPageCount(response.totalPage);
+
+
+        let state = false;
+        try {
+            let response = await UserService.fetchAllUsers(page ? page : currentPage, currentLimit);
+            if (response && response && response.errCode === '0') {
+                state = true;
+
+                response = response.data;
+                setUserList(response.userList);
+                setTotalPageCount(response.totalPage);
+            } else {
+                toast.error("Error fetching user list: " + response?.errMsg);
+            }
+        } catch (error) {
+            toast.error("Error fetching user list: " + error.message);
         }
+
+        return state;
     }
 
     const handleRefresh = async () => {
-        await fetchAllUsers();
-        toast.success("User data is up to date");
+        let state = await fetchAllUsers();
+        if (state) toast.success("User data is up to date");
     }
 
     const handlePageClick = async (event) => {
@@ -86,7 +104,7 @@ function Users(props) {
     }
 
     const handleSaveModalUser = async () => {
-        fetchAllUsers();
+        await fetchAllUsers();
     };
 
 
@@ -166,7 +184,7 @@ function Users(props) {
 
                                     })}
                                 </>
-                                : <tr><td><p>Not found Users</p></td></tr>}
+                                : <tr><td colSpan={9} className='text-center'><p>Not found Users</p></td></tr>}
                         </tbody>
                     </table>
 

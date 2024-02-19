@@ -74,37 +74,43 @@ function ModalUser(props) {
         if (validState === true) {
             let response = null;
 
-            if (action === 'CREATE') {
-                response = await UserService.createNewUserByModal(userData);
-            } else {
-                response = await UserService.updateUser(userData);
-            }
-
-            if (response && response.errCode === '0') {
-                toast.success(response.errMsg);
-                handleSave();
-
-                setUserData(defaultUserData);
-                handleClose();
-            } else {
+            try {
                 if (action === 'CREATE') {
-                    toast.error("Error creating new user: " + response.errMsg);
+                    response = await UserService.createNewUserByModal(userData);
                 } else {
-                    toast.error("Error updating user: " + response.errMsg);
+                    response = await UserService.updateUser(userData);
                 }
+
+                if (response && response.errCode === '0') {
+                    toast.success(response.errMsg);
+                    handleSave();
+
+                    setUserData(defaultUserData);
+                    handleClose();
+                } else {
+                    if (action === 'CREATE') {
+                        toast.error("Error creating new user: " + response?.errMsg);
+                    } else {
+                        toast.error("Error updating user: " + response?.errMsg);
+                    }
+                }
+            } catch (error) {
+                toast.error("Error handling request: " + error.message);
             }
+
         }
     }
 
     const fetchAllGroups = async () => {
-        let response = await UserService.fetchAllGroups();
-        if (response && response && response.errCode === '0') {
-            setUserGroupList(response.data);
-        } else {
-            toast.error("Error fetching groups");
-            if (response && response) {
-                toast.error(response.errMsg);
+        try {
+            let response = await UserService.fetchAllGroups();
+            if (response && response && response.errCode === '0') {
+                setUserGroupList(response.data);
+            } else {
+                toast.error("Error fetching groups: " + response?.errMsg);
             }
+        } catch (error) {
+            toast.error("Error fetching groups: " + error.message);
         }
     }
 
